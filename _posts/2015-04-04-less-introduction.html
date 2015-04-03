@@ -1,0 +1,388 @@
+<h1 id="less-css入门">LESS CSS入门</h1>
+
+<blockquote>
+  <p>less是动态的样式表语言，通过简洁明了的语法定义，使编写CSS的工作变得非常简单</p>
+  
+  <p>less在css的语法基础上，引入了变量，Mixin（混入），运算以及函数等功能，并且降低了CSS的维护成本</p>
+</blockquote>
+
+
+
+<h2 id="less原理及使用方式">less原理及使用方式</h2>
+
+<p>本质上，less包含自定义的语法和解析器，用户根据这些语法定义样式规则。这些规则最终通过解析器，编译生成对应的css文件。没有裁剪css原有的特性。</p>
+
+<p>三种使用方式：在客户端使用；也可以在服务器端使用；<strong>将less文件编译成静态css文件，在html文档中应用</strong></p>
+
+
+
+<h3 id="客户端">客户端</h3>
+
+<p>客户端使用.less（less源文件），从<a href="http://lesscss.org/">http://lesscss.org/</a>下载less.js文件，然后再需要引入less源文件的html中加入如下代码：</p>
+
+<pre><code>&lt;link rel="stylesheet/less" type="text/css" href="styles.less"&gt;
+</code></pre>
+
+<p>less源文件引入方式与标准css文件引入方式相似：<strong>但引入.less文件时，rel属性要设置为”stylesheet/less”。<em>*</em></strong>更重要的一点，less源文件要在less.js引入之前引入，这样才能保证less源文件正常编译解析。<em>*</em></p>
+
+
+
+<h3 id="服务器端">服务器端</h3>
+
+<p>借助less编译器，将less源文件编译生成最终css文件。常用方式：利用node的包管理器（npm）安装less，安装成功后就可以在node环境中对less源文件进行编译。</p>
+
+<p>在html中引入css或less（可以支持@import，.less文件可以忽略后缀，但css后缀名不能省略），如：</p>
+
+<pre><code>@import "variables.less";
+@import "variables";
+</code></pre>
+
+<p>但注意到<strong>import的局限性</strong>，还是少用比较好</p>
+
+<ol>
+<li>@import url()机制是不同于link的，link是在加载页面前把css加载完毕，而@import url()则是读取完文件后在加载，所以会出现一开始没有css样式，闪烁一下出现样式后的页面(网速慢的情况下)。 </li>
+<li>@import 是css2里面的，所以古老的ie5不支持。 </li>
+<li>当使用javascript控制dom去改变样式的时候，只能使用link标签，因为@import不是dom可以控制的。</li>
+<li>link除了能加载css外还能定义RSS，定义rel连接属性，@import只能加载css </li>
+<li>@import url(xxx.css); 有最大次数的限制，经测试IE6的最大次数是31次，第32个import及以后的都不能生效</li>
+</ol>
+
+
+
+<h3 id="使用编译生成的静态css文件">使用编译生成的静态css文件</h3>
+
+
+
+<h2 id="语法">语法</h2>
+
+
+
+<h3 id="变量">变量</h3>
+
+<p>less允许开发者自定义变量，变量可以在全局样式中使用。</p>
+
+<pre><code>/*less文件*/
+@border-color:#000;
+
+.mythemes{
+    border:1px solid @border-color;
+}
+</code></pre>
+
+<p>编译生成的css</p>
+
+<pre><code>/*css文件*/
+.mythemes{
+    border:1px solid #000;
+}
+</code></pre>
+
+<p>less中的变量实现值复用，有Scope。查找变量的顺序是在局部定义中找，如果找不到，则查找上级定义，直至全局。</p>
+
+<pre><code>/*less文件*/
+@width:20px;
+#home-div{
+    @width:30px;
+    #center-div{
+        width:@width;
+    }
+}
+#left-div{
+    width:@width;
+}
+</code></pre>
+
+<p>编译生成的css</p>
+
+<pre><code>/*css文件*/
+#home-div #center-div{
+    width:30px;
+}
+#left-div{
+    width:20px;
+}
+</code></pre>
+
+
+
+<h2 id="mixins混入">Mixins（混入）</h2>
+
+<ul>
+<li><p>是多重继承的一种实现，less中，混入是指在一个class中引入另外一个已经定义的class，就像当前class中增加一个属性一样。</p>
+
+<pre><code>/*less文件*/
+.a, #b{
+color:red;
+}
+.mixin-class{
+    .a();
+}
+.mixin-id{
+    #b();
+}
+</code></pre>
+
+<p>编译生成的css</p>
+
+<pre><code>/*css文件*/
+.a, #b{
+    color:red;
+}
+.mixin-class{
+    color:red;
+}
+.mixin-id{
+    color:red;
+}
+</code></pre></li>
+<li><p>如果不希望mixin输出，可以在其后面添加小括号。</p>
+
+<pre><code>/*less文件*/
+.my-mixin{
+    color:black;
+}
+.my-other-mixin(){
+    background:white;
+}
+.class{
+    .my-mixin;
+    .my-other-mixin;
+}
+</code></pre>
+
+<p>编译后的css</p>
+
+<pre><code>/*css文件*/
+.my-mixin{
+    color:black;
+}
+.class{
+    color:black;
+    background:white;
+}
+</code></pre></li>
+<li><p>带参数的mixins：</p>
+
+<pre><code>/*less文件*/
+.roundedCorners(@radius:5px){
+    -moz-border-radius:@radius;
+    -webkit-border-radius:@radius;
+    border-radius:@radius;
+}
+#header{
+    .roundedCorners;
+    /*.rounderCorners();括号可选*/
+}
+#footer{
+    .roundedConers(10px);
+}
+</code></pre>
+
+<p>编译后的css <br>
+    #header{ <br>
+        -moz-border-radius:5px; <br>
+        -webkit-border-radius:5px; <br>
+        border-radius:5px; <br>
+    } <br>
+    #footer{ <br>
+        -moz-border-radius:10px; <br>
+        -webkit-border-radius:10px; <br>
+        border-radius:10px; <br>
+    }</p></li>
+<li><p>mixins也有这样的一个变量：@arguments，该参数表示所有的变量。</p>
+
+<pre><code>/*less文件*/
+.boxShadow(@x:0,@y:0,@blur:1px,@color:#000){
+    -moz-box-shadow:@arguments;
+    -webkit-box-shadow:@arguments;
+    box-shadow:@arguments;
+}
+#header{
+    .boxShadow(2px,2px,3px,#f36);
+}
+</code></pre>
+
+<p>编译后的css</p>
+
+<pre><code>/*css文件*/
+#header{
+    -moz-box-shadow:2px 2px 3px #f36;
+    -webkit-box-shadow:2px 2px 3px #f36;
+    box-shadow:2px 2px 3px #f36;
+}
+</code></pre></li>
+<li><p>命名空间，将mixins放入id选择器中，确保不会与其他library冲突</p>
+
+<pre><code>/*less文件*/
+#outer{
+    .inner{
+        color:red;
+    }
+}
+.c{
+    #outer &gt; .inner;
+}
+/*&gt;和空格可选，以下相同效果：
+    #outer &gt; .inner;
+    #outer &gt; .inner();
+    #outer .inner;
+    #outer .inner();
+    #outer.inner;
+    #outer.inner();
+*/
+</code></pre></li>
+</ul>
+
+
+
+<h2 id="嵌套的规则">嵌套的规则</h2>
+
+<p>多层元素嵌套，可以从外岛内的选择器嵌套定义，要么采用给特定元素加class或id的方法。</p>
+
+<pre><code>/*html片段：*/ 
+&lt;div id="home"&gt; 
+    &lt;div id="top"&gt;top&lt;/div&gt; 
+    &lt;div id="center"&gt; 
+        &lt;div id="left"&gt;left&lt;/div&gt; 
+        &lt;div id="right"&gt;right&lt;/div&gt; 
+    &lt;/div&gt; 
+&lt;/div&gt;
+
+/*less文件*/
+#home{ 
+   color : blue; 
+   width : 600px; 
+   height : 500px; 
+   border:outset; 
+   #top{ 
+        border:outset; 
+        width : 90%; 
+   } 
+   #center{ 
+        border:outset; 
+        height : 300px; 
+        width : 90%; 
+        #left{ 
+            border:outset; 
+            float : left; 
+            width : 40%; 
+        } 
+        #right{ 
+            border:outset; 
+            float : left; 
+            width : 40%; 
+        } 
+    } 
+}
+
+/*css文件*/
+#home{
+    color:blue;
+    width:600px;
+    height:500px;
+    border:outset;
+}
+#home #top{
+    border:outset;
+    width:90%;
+}
+#home #center{
+    border:outset;
+    height:300px;
+    width:90%;
+}
+#home #center #left{
+    border:outset;
+    float:left;
+    width:40%;
+}
+#home #center #right{
+    border:outset;
+    float:left;
+    width:40%;
+}
+</code></pre>
+
+<p>嵌套规则使得伪元素操作更为方便</p>
+
+<pre><code>/*less文件*/
+a{
+    color:red;
+    text-decoration:none;
+    &amp;:hover{    /*有&amp;时解析的是统一元素或次元素的伪类，没有&amp;解析式后代元素*/
+        color:black;
+        text-decoration:underline;
+    }
+}
+</code></pre>
+
+<p>编译后的css</p>
+
+<pre><code>/*css文件*/
+a{
+    color:red;
+    text-decoration:none;
+}
+a:hover{
+    color:black;
+    text-decoration:underline;
+}
+</code></pre>
+
+
+
+<h2 id="运算及函数">运算及函数</h2>
+
+<p>css的数值型value，比如color、padding、margin，数值间运算</p>
+
+<pre><code>/*less文件*/
+@init:#111111;
+@transition:@init*2;
+.switchColor{
+    color:@transition;
+}
+</code></pre>
+
+<p>编译后的css</p>
+
+<pre><code>/*css文件*/
+.switchColor{
+    color:@transition;
+}
+</code></pre>
+
+<p>less有专门针对color的操作提供</p>
+
+<pre><code>lighten(@color, 10%); // return a color which is 10% *lighter* than @color 
+darken(@color, 10%); // return a color which is 10% *darker* than @color 
+saturate(@color, 10%); // return a color 10% *more* saturated than @color 
+desaturate(@color, 10%);// return a color 10% *less* saturated than @color 
+fadein(@color, 10%); // return a color 10% *less* transparent than @color 
+fadeout(@color, 10%); // return a color 10% *more* transparent than @color 
+spin(@color, 10); // return a color with a 10 degree larger in hue than @color 
+spin(@color, -10); // return a color with a 10 degree smaller hue than @color
+</code></pre>
+
+
+
+<h2 id="注释comments">注释（comments）</h2>
+
+<ol>
+<li>可以使用//进行行注释，less当行注释不显示在编译后的css中</li>
+<li>/**/多行注释</li>
+</ol>
+
+
+
+<h2 id="less-sass">less &amp; sass</h2>
+
+<p><a href="https://gist.github.com/chriseppstein/674726">Sass/Less Comparison</a></p>
+
+
+
+<h2 id="参考链接">参考链接</h2>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/cn/web/1207_zhaoch_lesscss/#ibm-pcon">LESS CSS 框架简介</a></li>
+<li><a href="http://lesscss.org/">less 官网</a></li>
+</ul>
