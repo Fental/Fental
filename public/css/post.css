@@ -1,10 +1,24 @@
 body{
-    background-color: #201F24;
+    background-color: #595959;
     font-size: 100%;
+    font-family: 宋体, Geneva, sans-serif;
 }
 .page{
-    background-color: #595959;
-    color: white;
+    background-color: white;
+    color: #201F24;
     max-width:60em;
     padding: 1.253em .625em;
+    margin:0 auto;
+}
+h1{
+    font-size: 1.25em;
+}
+h2{
+    font-size: 1.125em;
+}
+p{
+    font-size: .875em;
+}
+blockquote{
+    background-color: #595959;
 }
