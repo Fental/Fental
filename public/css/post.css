@@ -4,7 +4,7 @@ body{
     font-family: 宋体, Geneva, sans-serif;
 }
 body *{
-    font-size: .875em;
+    font-size: 1em;
 }
 .page{
     background-color: white;
@@ -14,10 +14,10 @@ body *{
     margin:0 auto;
 }
 h1{
-    font-size: 1.25em;
+    font-size: 1.5em;
 }
 h2{
-    font-size: 1.125em;
+    font-size: 1.25em;
 }
 
 blockquote{
@@ -27,5 +27,6 @@ blockquote{
 }
 pre{
     background-color: #cccccc;
-    border:.0625em dashed #595959;
+    border:.125em dashed #595959;
+    padding: .625em;
 }
