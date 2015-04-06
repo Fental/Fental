@@ -16,9 +16,15 @@ h1{
 h2{
     font-size: 1.125em;
 }
-p{
+p,p *{
     font-size: .875em;
 }
 blockquote{
-    background-color: #595959;
+    background-color: #cccccc;
+    padding: .625em;
+    border-left: solid .25em #595959;
+}
+pre{
+    background-color: #cccccc;
+    border:.0625em dashed #595959;
 }
