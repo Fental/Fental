@@ -1,0 +1,10 @@
+body{
+    background-color: #201F24;
+    font-size: 100%;
+}
+.page{
+    background-color: #595959;
+    color: white;
+    max-width:60em;
+    padding: 1.253em .625em;
+}
