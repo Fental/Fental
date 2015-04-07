@@ -8,12 +8,11 @@ body *{
 }
 .page{
     background-color: white;
-    color: #201F24;
     max-width:60em;
     padding: 1.253em .625em;
     margin:1em auto;
     border-radius: 1em;
-    box-shadow: .625em .625em #595959;
+    box-shadow: .25em .25em #595959;
 }
 h1{
     font-size: 1.875em;
