@@ -9,7 +9,7 @@ body *{
 .page{
     background-color: white;
     max-width:60em;
-    padding: 1.253em .625em;
+    padding: 1.253em 1.253em;
     margin:1em auto;
     border-radius: 1em;
     box-shadow: .25em .25em #595959;
