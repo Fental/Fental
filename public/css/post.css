@@ -31,3 +31,9 @@ pre{
     border:.125em dashed #595959;
     padding: .625em;
 }
+img.emoji {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: top;
+}
