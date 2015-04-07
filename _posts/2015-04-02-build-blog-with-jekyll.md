@@ -1,6 +1,6 @@
 ---
-layout:post
-title:我的博客——搭建过程
+layout: post
+title: 我的博客——搭建过程
 ---
 #我的博客——搭建过程
 
