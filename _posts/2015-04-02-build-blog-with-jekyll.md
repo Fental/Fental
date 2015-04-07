@@ -70,13 +70,13 @@ img.emoji {
 
 > 文章就是普通的文本文件，文件名假定为2012-08-25-hello-world.html。（**注意，文件名必须为“年-月-日-文章标题.后缀名”的格式**。如果网页代码采用html格式，后缀名为html；如果采用[mardown](http://daringfireball.net/projects/markdown/)格式，后缀名为md。）
 
-		---
-	　　layout: default
-	　　title: 你好，世界
-	　　---
-	　　<h2>{{ page.title }}</h2>
-	　　<p>我的第一篇文章</p>
-	　　<p>{{ page.date | date_to_string }}</p>
+	---
+	layout: default
+	title: 你好，世界
+	---
+	<h2>{{ page.title }}</h2>
+	<p>我的第一篇文章</p>
+	<p>{{ page.date | date_to_string }}</p>
 
 
 >每篇文章的头部，必须有一个yaml文件头，用来设置一些元数
