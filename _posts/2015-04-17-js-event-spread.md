@@ -1,3 +1,7 @@
+---
+layout: post
+title: js的事件冒泡和捕获
+---
 #js的事件冒泡和捕获
 
 1. 冒泡型事件：时间按照从最特定的事件目标到最不特定的事件目标（document）的顺序触发
@@ -75,3 +79,7 @@ e.addEventListener("click", handler5, true);
 2. window.event.returnValue = false;
 
 不是所有事件都能冒泡。例如，blur focus load unload
+
+#参考链接
+
+[js事件冒泡和事件捕获详细介绍](http://blog.csdn.net/Tender001/article/details/44589501)
