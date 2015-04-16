@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 我的博客——搭建过程
+title: js模块化编程（三）：require.js的用法
 ---
 #js模块化编程（三）：require.js的用法
 
