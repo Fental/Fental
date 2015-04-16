@@ -1,3 +1,7 @@
+---
+layout: post
+title: 我的博客——搭建过程
+---
 #js模块化编程（三）：require.js的用法
 
 实战，使用库require.js
