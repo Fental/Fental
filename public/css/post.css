@@ -1,12 +1,12 @@
-body{
-    background-color: #cccccc;
+body {
+    background-color: #ccc;
     font-size: 100%;
     font-family: Geneva, SimSun, sans-serif;
 }
-body *{
+body * {
     font-size: 1em;
 }
-.page{
+.page {
     background-color: white;
     max-width:60em;
     padding: 1.253em 1.253em;
@@ -14,22 +14,22 @@ body *{
     border-radius: 1em;
     box-shadow: .25em .25em #595959;
 }
-h1{
+h1 {
     font-size: 1.875em;
 }
-h2{
+h2 {
     font-size: 1.5em;
 }
 
-blockquote{
+blockquote {
     margin-left: 0;
     margin-right: 0;
-    background-color: #cccccc;
+    background-color: #ccc;
     padding: .625em;
     border-left: solid .25em #595959;
 }
-pre{
-    background-color: #cccccc;
+pre {
+    background-color: #ccc;
     border:.125em dashed #595959;
     padding: .625em;
 }
