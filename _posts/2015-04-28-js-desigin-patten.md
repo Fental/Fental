@@ -236,4 +236,5 @@ CompositeForm.prototype.save = function() {
 	//...
 };
 
+{% endhighlight %}
 
