@@ -50,8 +50,9 @@ img.emoji {
 }
 
 .post-aside {
-    position: absolute;
+    position: fixed;
     left: 61em;
+    top: 0;
     padding: .625em;
 }
 .post-aside div {
