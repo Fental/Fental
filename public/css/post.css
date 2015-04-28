@@ -21,7 +21,10 @@ h1 {
 h2 {
     font-size: 1.5em;
 }
-
+a {
+    color: #ccc;
+    text-shadow: .0625em .0625em #595959;
+}
 blockquote {
     margin-left: 0;
     margin-right: 0;
@@ -48,10 +51,12 @@ img.emoji {
 
 .post-aside {
     position: absolute;
-    right: -1.25em;
+    left: 61em;
     padding: .625em;
 }
 .post-aside div {
-    background-color: #fff;
     padding: auto .625em;
+    margin-bottom: .625em;
+    background-color: #fff;
+    border-radius: .25em;
 }

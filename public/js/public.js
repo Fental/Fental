@@ -1,7 +1,7 @@
 /**
  * Created by T on 2015/4/7.
  */
-window.onload=function(){
+window.onload = function(){
     emojify.setConfig({
         emoticons_enabled: true,
         people_enabled: true,
