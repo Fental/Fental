@@ -22,8 +22,9 @@ h2 {
     font-size: 1.5em;
 }
 a {
-    color: #ccc;
-    text-shadow: .0625em .0625em #595959;
+    color: #595959;
+    text-shadow: .0625em .0625em #ccc;
+    text-decoration: none;
 }
 blockquote {
     margin-left: 0;
@@ -50,14 +51,14 @@ img.emoji {
 }
 
 .post-aside {
-    position: fixed;
+    position: absolute;
     left: 61em;
     top: 0;
     padding: .625em;
 }
 .post-aside div {
-    padding: auto .625em;
+    padding: .625em 1.25em;
     margin-bottom: .625em;
     background-color: #fff;
-    border-radius: .25em;
+    border-radius: .5em;
 }
