@@ -7,7 +7,8 @@ body * {
     font-size: 1em;
 }
 .page {
-    background-color: white;
+    position: relative;
+    background-color: #fff;
     max-width:60em;
     padding: 1.253em 1.253em;
     margin:1em auto;
@@ -43,4 +44,14 @@ img.emoji {
     height: 1em;
     display: inline-block;
     vertical-align: top;
+}
+
+.post-aside {
+    position: absolute;
+    right: -1.25em;
+    padding: .625em;
+}
+.post-aside div {
+    background-color: #fff;
+    padding: auto .625em;
 }
