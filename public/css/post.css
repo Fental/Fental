@@ -64,5 +64,5 @@ img.emoji {
     margin-bottom: .625em;
     background-color: #fff;
     border-radius: .5em;
-    box-shadow: 0 .25em #595959;
+    box-shadow: .25em 0 #595959;
 }
