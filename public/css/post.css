@@ -33,6 +33,10 @@ pre {
     border:.125em dashed #595959;
     padding: .625em;
 }
+pre code {
+    display: inline-block;
+    background-color: #ccc;
+}
 img.emoji {
     width: 1em;
     height: 1em;
