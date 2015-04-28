@@ -32,6 +32,7 @@ pre {
     background-color: #ccc;
     border:.125em dashed #595959;
     padding: .625em;
+    overflow-x: auto;
 }
 pre code {
     display: inline-block;
