@@ -22,13 +22,15 @@ h2 {
     font-size: 1.5em;
 }
 a {
-    font-weight: 700;
     color: #ccc;
     text-shadow: .0625em .0625em #595959;
     text-decoration: none;
 }
 a:hover {
     color: #595959;
+}
+p {
+    line-height: 1.5;
 }
 blockquote {
     margin-left: 0;
