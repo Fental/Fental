@@ -22,6 +22,7 @@ h2 {
     font-size: 1.5em;
 }
 a {
+    font-weight: 700;
     color: #ccc;
     text-shadow: .0625em .0625em #595959;
     text-decoration: none;
