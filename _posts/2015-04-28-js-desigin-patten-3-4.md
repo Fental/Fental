@@ -42,7 +42,7 @@ js创建对象的基本模式有3种：门户大开型（fully exposed），只�
 
 //Book(isbn, title, author)
 
-var theHobbit = new Book("0-395-07122-4", "The Hobbit", "J. R. R. Tolkien");
+var theHobbit = new Book('0-395-07122-4', 'The Hobbit', 'J. R. R. Tolkien');
 
 theHobbit.display();
 
@@ -56,16 +56,49 @@ theHobbit.display();
 
 var Book = function(isbn, title, author) {
 	if (isbn == undefined) {
-		throw new Error("Book constructor requires an isbn.");
+		throw new Error('Book constructor requires an isbn.');
 	}
 	this.isbn = isbn;
-	this.title = title || "No title specified";
-	this.author = author || "No author specified";
+	this.title = title || 'No title specified';
+	this.author = author || 'No author specified';
 };
 
 Book.prototype.display = function() {
 	//...
 };
+
+{% endhighlight %}
+
+可在上述代码中添加一个checkIsbn方法，保证ISBN是一个具有正确位数和校验和的字符串，还可以在一定程度上确保display方法能正常工作。
+
+{% highlight js %}
+
+Book.prototype = {
+	var checkIsbn = function() {
+		//...
+	};
+	var display = function() {
+		//...
+	};
+}
+
+{% endhighlight %}
+
+但无法保证其他人会直接赋什么样的值给内部数据。
+
+{% highlight js %}
+
+//譬如有人会这么做
+theHobbit.isbn = '987-0261103283';
+theHobbit.display();
+
+{% endhighlight %}
+
+为了保护内部数据，为每个属性提供取值器(accessor，通常以getAttributeName这种形式命名，用于获取属性值)和赋值器(mutator，通常以setAttributeName这种形式命名)方法，可以在把新值赋给属性前进行检验。
+
+{% highlight js %}
+
+var Publication = new Interface('Publication',);
 
 {% endhighlight %}
 
