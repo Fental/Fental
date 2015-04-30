@@ -240,7 +240,7 @@ CompositeForm.prototype.save = function() {
 
 模仿效果不好，没有检查CompositeForm是否真正实现了正确的方法集，实现全靠自觉
 
-#####2.3.2 用属性检查模仿借口
+#####2.3.2 用属性检查模仿接口
 
 所有类都明确地声明自己实现了哪些接口，那些想与这些类打交道的对象可以针对这些声明进行检查，接口自身仍然只是注释，但可通过检查一个属性得知某个类自称实现了什么接口：
 
@@ -302,13 +302,13 @@ function implements(object) {
 
 缺点： 为确保类真正实现了自称实现的接口。
 
-#####2.3.3 用鸭式辨型模仿借口
+#####2.3.3 用鸭式辨型模仿接口
 
 类是否声明自己支持哪些接口不重要，只要具有接口中的方法就行。
 
 > 像鸭子一样走路并且嘎嘎叫的就是鸭子。
 
-把对象实现的方法集作为判断它是不是某个类的实例的唯一标准。如果对象具有与几口定义的方法同名的所有方法，那么就可以认为它实现了这个接口。
+把对象实现的方法集作为判断它是不是某个类的实例的唯一标准。如果对象具有与接口定义的方法同名的所有方法，那么就可以认为它实现了这个接口。
 
 {% highlight js %}
 
@@ -379,7 +379,7 @@ var Interface = function(name, methods) {
 	this.methods = [];
 	for (var i = 0, len = methods.length; i < len; i++) {
 		if (typeof methods[i] !== 'string') {
-			throw new Errow('Interface constructor expects method names to be passed in as a string');
+			throw new Error('Interface constructor expects method names to be passed in as a string');
 		}
 		this.methods.push(methods[i]);
 	}
@@ -453,7 +453,7 @@ function displayRoute(mapInstance) {
 
 var ResultFormatter = function(resultsObject) {
 	if(!(resultsObject instanceOf TestResult)) {
-		throw new Errow('ResultsFormatter: constructor requires an instance of TestResult as an argument');
+		throw new Error('ResultsFormatter: constructor requires an instance of TestResult as an argument');
 	}
 	this.resultsObject = resultsObject;
 };
