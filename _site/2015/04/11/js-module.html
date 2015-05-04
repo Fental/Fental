@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>js模块化编程</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="js">js模块化编程</h1>
+
+<h2 id="section">原始写法</h2>
+
+<blockquote>
+  <p>模块就是实现特定功能的一组方法。只要把不同的函数（以及记录状态的变量）简单地放在一起，就算是一个模块。</p>
+</blockquote>
+
+<pre><code>function m1(){
+	//...
+}
+function m2(){
+	//...
+}
+</code></pre>
+
+<p>缺点，“污染”了全局变量，无法保证不与其他模块发生变量名冲突，模块之间看不出直接关系。</p>
+
+<h2 id="section-1">对象写法</h2>
+
+<pre><code>var module1=new Object({
+	_count:0,
+	m1:function(){
+		//...
+	},
+	m2:function(){
+		//...
+	}
+});
+</code></pre>
+
+<p>缺点：这样写暴露模块成员，内部状态可以被外部改写。
+比如：</p>
+
+<pre><code>module1._count=5;
+</code></pre>
+
+<h2 id="section-2">立即执行函数写法</h2>
+
+<p><a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a>:立即执行函数写法。可以达到不暴露私有成员的目的。</p>
+
+<pre><code>var module1=(function{
+	var _count=0;
+	var m1=function(){
+		//...
+	};
+	var m2=function(){
+		//...
+	};
+	return{
+		m1:m1,
+		m2:m2
+	}
+})();
+</code></pre>
+
+<p>module1就是js模块的基本写法</p>
+
+<h2 id="section-3">放大模式</h2>
+
+<p>IIFE的加工。</p>
+
+<blockquote>
+  <p>如果一个模块很大，必须分成几个部分，或者一个模块需要继承另一个模块，这时就有必要采用“放大模式”（augmentation）。</p>
+</blockquote>
+
+<pre><code>var module1=(function (mod){
+	mod.m3=function(){
+		//...
+	};
+	return mod;
+})(module1);
+</code></pre>
+
+<p>为module1模块添加新方法m3()，然后返回新的module1模块。
+=。=这个模式让我想起了最近在写jQuery插件。</p>
+
+<h2 id="loose-augmentation">宽放大模式（Loose augmentation）</h2>
+
+<blockquote>
+  <p>在浏览器环境中，模块的各个部分通常都是从网上获取，有时无法知道哪部分会先加载。放大模式有可能加载不存在的空对象。</p>
+</blockquote>
+
+<p>宽放大模式解决这一问题。</p>
+
+<pre><code>var module1=(function(mod){
+	//...
+	return mod;
+})(window.module1||{});
+</code></pre>
+
+<p>与放大模式相比，宽放大模式就是立即执行函数的参数可以是空对象。</p>
+
+<h2 id="section-4">输入全局变量</h2>
+
+<blockquote>
+  <p>独立性是模块的重要特点，模块内部最好不与程序的其他部分直接交互。
+为了在模块内部调用全局变量，必须显示地将其他变量输入模块。</p>
+</blockquote>
+
+<pre><code>var module1=(function($,YAHOO){
+	//...
+}(jQuery,YAHOO);
+</code></pre>
+
+<blockquote>
+  <p>上面的moudule1模块需要使用jQuery和YUI库，就把两个库（其实是两个模块）当作参数输入module1.可以保证模块独立性，还能使得模块之间的依赖关系变得明显。</p>
+</blockquote>
+
+<p>更多讨论。[《JavaScript Module Pattern: In-Depth》(http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html)</p>
+
+<h1 id="section-5">参考链接</h1>
+
+<p><a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">Javascript模块化编程（一）：模块的写法</a></p>
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>

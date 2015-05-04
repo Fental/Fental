@@ -577,7 +577,306 @@ alert(reader.getName());
 reader.name = 'John Smith';
 alert(reader.getName());
 
-//clone函数用来创建新的类Person对象
+//clone函数用来创建新的类Person对象。创建一个空对象，其原型对象呗设置为Person
+
+//继承
+//Author Prototype Object
+
+var Author = clone(Person);
+Author.books = [];
+Author.getBooks = function() {
+	return this.books;
+};
+
+//实例化
+var author = [];
+
+author[0] = clone(Author);
+author[0].name = 'Dustin Diaz';
+author[0].books = ['JavaScript Design Patterns'];
+
+author[1] = clone(Author);
+author[1].name = 'Ross Harmes';
+author[1].books = ['JavaScript Design Patterns'];
+
+author[1].getName();
+author[1].getBooks();
+
+{% endhighlight %}
+
+#####4.3.1 对继承而来的成员的读和写的不对等性
+
+> 为了有效地使用原型式继承，你必须忘记有关类式继承的一切。在类式继承中，Author的每一个实例都有一份自己的books数组副本。你可以用代码`author[1].books.push('New Book Title')`为其添加元素。
+>
+>但是对于使用原型式继承方式创建的类Author对象来说，由于原型链接的工作方式，这种做法并非一开始就能行得通。一个克隆并非其原型对象的一份完全独立的副本，它只是一个以哪个对象为原型对象的空对象而已。克隆刚被创建时，author[1].name其实是一个指向最初的Person.name的链接。对于从原型对象继承而来的成员，其读和写具有内在的不对等性。在读取author[1].name的值时，如果你还没有直接为author[1]实例定义name属性的话，那么所得到的是其原型对象的同名属性值。而在写入author[1].name的值时，你是在直接为author[1]对象定义一个新属性。
+>
+>说明了为什么必须为通过引用传递的数据类型的属性创建新副本
+
+{% highlight js %}
+
+var authorClone = clone(Author);
+alert(authorClone.name);	//指向原先的Person.name
+
+authorClone.name = 'new name';	//name被创建并被添加到authorClone object自身
+
+alert(authorClone.name);	//指向authorClone.name
+
+authorClone.books.push('new book');	//authorClone.books被链接到Author.books，这里修改了prototype object的默认值
+
+authorClone.books = [];	//新的books被添加到authorClone自身
+
+authorClone.books.push('push book');
+
+
+{% endhighlight %}
+
+有时原型对象也有自己的子对象。为了尽量弱化对象之间的耦合，任何复杂的子对象都应该使用方法创建。
+
+{% highlight js %}
+
+var CompoundObject = {
+	string1: "default value",
+	childObject: {
+		bool: true,
+		num: 10
+	}
+};
+
+var compoundObjectClone = clone(CompoundObject);
+
+//Bad!修改了CompoundObject.childObject.num
+compoundObjectClone.childObject.num = 5;
+
+//Better.创建了一个新的Object，但必须知道object的结构，导致紧耦合
+compoundObjectClon.childObject = {
+	bool: true,
+	num: 5
+};
+
+//更好的办法，使用工厂方法来创建childObject
+//Best
+var CompoundObject = {};
+CompoundObject.string1 = 'default value';
+CompoundObject.createChildObject = function() {
+	return {
+		bool: true,
+		num: 10
+	};
+};
+CompoundObject.childObject = CompoundObject.createChildObject();
+
+var compoundObjectClone = clone(compoundObject);
+compoundObjectClone.childObject = CompoundObject.createChildObject();
+compoundObjectClone.childObject.num = 5;
+
+{% endhighlight %}
+
+#####4.3.2 clone函数
+
+clone函数首先创建一个新的空函数F，然后将F的prototype属性设置为作为参数object传入的原型对象。
+
+prototype属性就是用来指向原型对象的，通过原型链接机制，提供了到所有继承而来的成员的连接。
+
+函数所返回的这个克隆结果是一个以给定对象为原型对象的空对象。
+
+{% highlight js %}
+
+function clone(object) {
+	function F() {
+	}
+	F.prototype = object;
+	//为什么不用
+	//F.prototype.constructor = F;
+
+	return new F();
+}
+
+{% endhighlight %}
+
+####4.4 类式继承和原型式继承的对比
+
+大相径庭，各有有确定。判断特定场合应该使用哪一种。
+
+几乎所有用面向对象方式编写的js代码中都用到类式继承，设计众人使用的Api最后还是使用类式继承。
+
+在各种流行语言中只有js使用原型式继承，对象具有到自己的原型对象的反向链接。但高级js程序猿需要懂的原型式继承的工作机制
+
+原型式继承更能节约内存。在原型链查找成员的方式使得所有克隆出来的对象都共享每个属性和方法的唯一一份实例（上面也提到过）。原型继承显得更为简练。
+
+本书介绍的设计模式都可以应用于两种继承范型。但本书主要使用类式继承
+
+####4.5 继承与封装
+
+封装对继承的影响。从现有类派生出一个子类时，只有公用和特权成员会被承袭下来。
+
+由于这个原因门户大开型类是最适合于派生子类的。所有成员公开，可遗传给子类，若要稍加隐藏，可使用下划线符号规范。
+
+派生具有真正的私用成员的类时，特权方法是公用，所以会被遗传下来。藉此可以在子类中间接访问父类的私用属性，但子类自身的实力方法都不能直接访问这些私用属性。
+
+不累的私用成员只能通过这些既有的特权方法进行访问，不能再子类中添加能够直接访问它们的新的特权方法。
+
+####4.6 掺元类
+
+有一种重用代码的方法不需要用到严格的继承。把一个函数用到多个类中，可以通过扩充的方式让这些类共享该函数。
+
+实际做法：创建一个包含各种通用方法的类（掺元类），然后再用它扩充其他类。
+
+{% highlight js %}
+
+//Mixin类 掺元类
+var Mixin = function() {
+};
+
+Mixin.prototype = {
+
+	//遍历this对象的所有成员并将值组织为一个字符串输出
+
+	serialize: function() {
+		var output = [];
+		for (key in this) {
+			output.push(key + ':' + this[key]);
+		}
+		return output.join(', ');
+	}
+};
+
+//扩充
+augment(Author, Mixin);	//扩充函数，下面会提到
+
+var author = new Author('Ross Harmes', ['JavaScript Design Patterns']);
+var serializedString = author.serialize();
+
+{% endhighlight %}
+
+Mixin类只有一个方法。可能在许多不同类型的类都会用到，但没必要让这些泪都继承Mixin，把这个方法的代码复制到这些类也并不明智。最好还是用augment函数把这个方法添加到每个需要它的类中。一个类可以用多个掺元类加以扩充，实际上实现了多继承的效果。
+
+{% highlight js %}
+
+//augment函数
+function augment(receivingClass, givingClass) {
+	for (methodName in givingClass.prototype) {
+		if (!receivingClass.prototype[methodName]) {
+			receivingClass.prototype[methodName] = givingClass.prototype[methodName];
+		}
+	}
+}
+
+//改进，可复制其中的一两个方法
+
+function augment(reveivingClass, givingClass) {
+	if(arguments[2]) {	//给了确定的方法
+		for (var i = 2, len = arguments.length; i < len; i++) {
+			receivingClass.prototype[arguments[i]] = givingClass.prototype[arguments[i]];
+		}
+	}
+	else {
+		for (methodName in givingClass.prototype) {
+			if (!receivingClass.prototype[methodName]) {
+				receivingClass.prototype[methodName] = givingClass.prototype[methodName];
+			}
+		}
+	}
+}
+
+//augment(Author, Mixin, 'serialize');
+
+{% endhighlight %}
+
+####4.7 示例： 就地编辑
+
+提供了三种解决方案，演示了类式继承、原型式继承和掺元类的用法
+
+{% highlight js %}
+
+function EditInPlaceField(id, parent, value) {
+    this.id = id;
+    this.value = value || 'default value';
+    this.parentElement = parent;
+
+    this.createElements(this.id);
+    this.attachEvents();
+}
+
+EditInPlaceField.prototype = {
+    createElements: function(id) {
+        this.containerElement = document.createElement('div');
+        this.parentElement.appendChild(this.containerElement);
+
+        this.staticElement = document.createElement('span');
+        this.containerElement.appendChild(this.staticElement);
+        this.staticElement.innerHTML = this.value;
+
+        this.fieldElement = document.createElement('input');
+        this.fieldElement.type = 'text';
+        this.fieldElement.value = this.value;
+        this.containerElement.appendChild(this.fieldElement);
+
+        this.saveButton = document.createElement('input');
+        this.saveButton.type = 'button';
+        this.saveButton.value = 'Save';
+        this.containerElement.appendChild(this.saveButton);
+
+        this.cancelButton = document.createElement('input');
+        this.cancelButton.type = 'button';
+        this.cancelButton.value = 'Cancel';
+        this.containerElement.appendChild(this.cancelButton);
+        this.converToText();
+    },
+    attachEvents: function() {
+        var that = this;
+        addEvent(this.staticElement, 'click', function() {
+            that.convertToEditable();
+        });
+        addEvent(this.saveButton, 'click', function() {
+            that.save();
+        });
+        addEvent(this.cancelButton, 'click', function() {
+            that.cancel();
+        });
+    },
+    convertToEditable: function() {
+        this.staticElement.style.display = 'none';
+        this.fieldElement.style.display = 'inline';
+        this.saveButton.style.display = 'inline';
+        this.cancelButton.style.display = 'inline';
+
+        this.setValue(this.value);
+    },
+    save: function() {
+        this.value = this.getValue();
+        var that = this;
+        var callback = {
+            success: function() {
+                that.convertToText();
+            },
+            failure: function() {
+                alert('Error saving value');
+            }
+        };
+        ajaxRequest('GET', 'save.php?id=' + this.id + '&value=' + this.value, callback);
+    },
+    cancel: function() {
+        this.fieldElement.style.display = 'none';
+        this.saveButton.style.display = 'none';
+        this.cancelButton.style.display = 'none';
+        this.staticElement.style.display = 'inline';
+
+        this.setValue(this.value);
+    },
+
+    setValue: function(value) {
+        this.fieldElement.value = value;
+        this.staticElement.innerHTML = value;
+    },
+    getValue: function() {
+        return this.fieldElement.value;
+    }
+};
+
+//创建一个就地编辑域，实例化这个类
+
+var titleClassical = new EditInPlaceField('titleClassical', $('doc'), 'Title Here');
+var currentTitleText = titleClassical.getValue();
 
 {% endhighlight %}
 

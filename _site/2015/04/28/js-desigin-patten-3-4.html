@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>JavaScript设计模式 3-4章</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="js">JS设计模式读书笔记</h1>
+
+<h2 id="js-1">一. 面向对象的js</h2>
+
+<h3 id="section">3. 封装和信息隐藏</h3>
+
+<p>封装是面向对象设计的基石，为对象创建私有成员是任何面向对象语言最基本和有用的特性之一。将一个方法或属性声明为私有的，可以让对象的实现细节对其他对象保密以降低对象之间的耦合程度，可以保持数据的完整性并对其修改方式加以约束。</p>
+
+<p>js不具备用以将成员声明为公用或私用的任何内置机制。但利用语言的灵活性实现这种特性。</p>
+
+<h4 id="section-1">3.1 信息隐藏原则</h4>
+
+<h5 id="section-2">3.1.1 封装与信息隐藏</h5>
+
+<p>一种概念的两种表述。信息隐藏是目的，而封装则是借以达到这个目的的技术。</p>
+
+<p>封装可以被定义为对对象的内部数据表现形式和实现细节进行隐藏。要想访问封装过的对象中的数据，只有使用已定义的操作这一种方法。通过封装可以强制实施信息隐藏。</p>
+
+<h5 id="section-3">3.1.2 接口扮演的角色</h5>
+
+<p>在向其他对象隐藏信息的过程中接口发挥的作用：</p>
+
+<p>接口提供了一份记载着可供公众访问的方法的契约。<strong>定义了两个对象间可以具有的关系，只要接口不变，这个关系的双方都是可替换的。应该避免公开未定义于接口中的方法。否则其他对象可能会对那些并不属于接口的方法产生依赖。</strong></p>
+
+<blockquote>
+  <p>一个理想的软件系统应该为所有类定义接口。这些类只向外界提供它们实现的接口中规定的方法，任何别的方法都留作自用。其所有属性都是私用的，外界只能通过接口中定义的存取操作与之打交道。但实际的系统很少能真正达到这样的境界。<strong>优质的代码应尽量想这个目标靠拢，但又不能过于刻板，把那些并不需要这些特性的简单项目复杂化。</strong></p>
+</blockquote>
+
+<h4 id="section-4">3.2 创建对象的基本模式</h4>
+
+<p>js创建对象的基本模式有3种：门户大开型（fully exposed），只能提供公用成员；使用下划线来表示方法或属性的私有性；使用闭包来创建真正私用的成员。</p>
+
+<p>三种方法各有利弊。</p>
+
+<p>以Book类为例。创建一个用来存储关于一本书的数据的类，并为其实现一个以HTML形式显示这些数据的方法。</p>
+
+<p>它会被这么使用</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Book(isbn, title, author)</span>
+
+<span class="kd">var</span> <span class="nx">theHobbit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s1">&#39;0-395-07122-4&#39;</span><span class="p">,</span> <span class="s1">&#39;The Hobbit&#39;</span><span class="p">,</span> <span class="s1">&#39;J. R. R. Tolkien&#39;</span><span class="p">);</span>
+
+<span class="nx">theHobbit</span><span class="p">.</span><span class="nx">display</span><span class="p">();</span></code></pre></div>
+
+<h5 id="section-5">3.2.1 门户大开型对象</h5>
+
+<p>用函数来做其构造器，公用属性需要使用this关键字来创建</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isbn</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">isbn</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book constructor requires an isbn.&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">isbn</span> <span class="o">=</span> <span class="nx">isbn</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;No title specified&#39;</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span> <span class="o">||</span> <span class="s1">&#39;No author specified&#39;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span></code></pre></div>
+
+<p>可在上述代码中添加一个checkIsbn方法，保证ISBN是一个具有正确位数和校验和的字符串，还可以在一定程度上确保display方法能正常工作。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">checkIsbn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">};</span>
+	<span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">};</span>
+<span class="p">}</span></code></pre></div>
+
+<p>但无法保证其他人会直接赋什么样的值给内部数据。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//譬如有人会这么做</span>
+<span class="nx">theHobbit</span><span class="p">.</span><span class="nx">isbn</span> <span class="o">=</span> <span class="s1">&#39;987-0261103283&#39;</span><span class="p">;</span>
+<span class="nx">theHobbit</span><span class="p">.</span><span class="nx">display</span><span class="p">();</span></code></pre></div>
+
+<p>为了保护内部数据，为每个属性提供取值器(accessor，通常以getAttributeName这种形式命名，用于获取属性值)和赋值器(mutator，通常以setAttributeName这种形式命名)方法，可以在把新值赋给属性前进行检验。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Publication</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;Publication&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;getIsbn&#39;</span><span class="p">,</span> <span class="s1">&#39;setIsbn&#39;</span><span class="p">,</span> <span class="s1">&#39;getTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;setTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;getAuthor&#39;</span><span class="p">,</span> <span class="s1">&#39;setAuthor&#39;</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isbn</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Publication</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">title</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setAuthor</span><span class="p">(</span><span class="nx">author</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">checkIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isbn</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">},</span>
+	<span class="nx">getIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">isbn</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">setIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isbn</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book: Invalid ISBN&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">isbn</span> <span class="o">=</span> <span class="nx">isbn</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">getTitle</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">setTitle</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;No title sepecified&#39;</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">getAuthor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">setAuthor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span> <span class="o">||</span> <span class="s1">&#39;No author sepecified&#39;</span><span class="p">;</span>
+	<span class="p">},</span> 
+	<span class="nx">display</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>虽然这个类有对数据具有保护作用的取值器和赋值器方法、有效性检验的方法，但又漏洞。</p>
+
+<p><strong>成员属性仍然公开，可以被直接设置，别人依然可以无视提供的结构，直接赋值。</strong></p>
+
+<h5 id="section-6">3.2.2 用命名规范区别私用成员</h5>
+
+<p>通过使用命名规范模仿私用成员的模式，致力于解决上一节中遇到的一个问题：无法阻止其他程序猿无意中绕过所有检验步骤。</p>
+
+<p>本质上这种模式与门户大开型对象创建模式如出一辙，只不过在一些方法和属性的名称前加了下划线以示其私用性而已。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Publication</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;Publication&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;getIsbn&#39;</span><span class="p">,</span> <span class="s1">&#39;setIsbn&#39;</span><span class="p">,</span> <span class="s1">&#39;getTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;setTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;getAuthor&#39;</span><span class="p">,</span> <span class="s1">&#39;setAuthor&#39;</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">isbn</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Publication</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">);</span>
+	<span class="c1">//...</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">checkIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">},</span>
+	<span class="nx">getIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_isbn</span><span class="p">;</span>
+	<span class="p">},</span>
+	<span class="nx">setIsbn</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book: Invalid ISBN&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">_isbn</span> <span class="o">=</span> <span class="nx">isbn</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="c1">//...</span>
+<span class="p">};</span></code></pre></div>
+
+<p>这种命名规范也可以应用于方法。</p>
+
+<p>下划线的这种用法是个众所周知的命名规范，表明属性（或方法）仅供对象内部使用，直接访问它或设置它可能会导致意想不到的后果。</p>
+
+<p>这助于防止对它无意使用，却不能防止对它的有意使用。</p>
+
+<h5 id="section-7">3.2.3 作用域、嵌套函数和闭包</h5>
+
+<p>真正实现私用性。</p>
+
+<p>一些技术原理：</p>
+
+<p>作用域： js中，只有函数有作用域，函数内部声明的变量在函数外部无法访问。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+	
+	<span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">a</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+		<span class="c1">//a定义在foo()中，bar可以访问它</span>
+	<span class="p">}</span>
+	
+	<span class="nx">bar</span><span class="p">();</span>
+	<span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>闭包： 函数体内的变量都可以保存在其函数作用域内，形成一个包。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+	
+	<span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">a</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+		<span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+	<span class="p">}</span>
+	
+	<span class="k">return</span> <span class="nx">bar</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">baz</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">();</span>
+<span class="nx">baz</span><span class="p">();</span>	<span class="c1">//20</span>
+<span class="nx">baz</span><span class="p">();</span>	<span class="c1">//40</span>
+<span class="nx">baz</span><span class="p">();</span>	<span class="c1">//80</span></code></pre></div>
+
+<p>私用属性就其本质就是希望在对象外部无法访问的变量。</p>
+
+<h5 id="section-8">3.2.4 用闭包实现私用成员</h5>
+
+<p>借用闭包。为了创建私用属性，需要在构造器函数的作用域中定义相关变量，这些变量可以被定义于该作用域中的所有函数访问，包括那些特权方法：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">,</span> <span class="nx">newTitle</span><span class="p">,</span> <span class="nx">newAuthor</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Publication</span>
+
+	<span class="c1">//Private attributes.</span>
+	<span class="c1">//var声明这些变量，意味着只存在于Book构造器中</span>
+	<span class="kd">var</span> <span class="nx">isbn</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">;</span>
+
+	<span class="c1">//Private method.</span>
+	<span class="c1">//checkIsbn同样只存在于Book构造器中</span>
+	<span class="kd">function</span> <span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+
+	<span class="c1">//Privileged methods.</span>
+	<span class="c1">//特权方法，是公用方法，却能访问私用属性和方法</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">getIsbn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">isbn</span><span class="p">;</span>
+	<span class="p">};</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">))</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book: Invalid ISBN&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nx">isbn</span> <span class="o">=</span> <span class="nx">newIsbn</span><span class="p">;</span>
+	<span class="p">};</span>
+	
+	<span class="k">this</span><span class="p">.</span><span class="nx">getTitle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">title</span><span class="p">;</span>
+	<span class="p">};</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setTitle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newTitle</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">title</span> <span class="o">=</span> <span class="nx">newTitle</span> <span class="o">||</span> <span class="s1">&#39;No title specified&#39;</span><span class="p">;</span>
+	<span class="p">};</span>
+
+	<span class="k">this</span><span class="p">.</span><span class="nx">getAuthor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">author</span><span class="p">;</span>
+	<span class="p">};</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setAuthor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newAuthor</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">author</span> <span class="o">=</span> <span class="nx">newAuthor</span> <span class="o">||</span> <span class="s1">&#39;No author specified&#39;</span><span class="p">;</span>
+	<span class="p">};</span> 
+
+	<span class="c1">//Constructor code</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">newTitle</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">setAuthor</span><span class="p">(</span><span class="nx">newAuthor</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">//Public, non-privilieged methods</span>
+<span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">display</span><span class="o">:</span> <span class="nx">funciton</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>这种对象创建模式解决了其他模式中的所有问题，但有弊端：</p>
+
+<ol>
+  <li>前两种对象创建模式中，所有方法都创建在原型对象中，因此不管生成多少对象实例，这些方法在内存中只有一份。而利用闭包创建对象将为每一个私用方法和特权方法生成一个新副本。所以只宜在需要真正的私用成员的场合。</li>
+  <li>不利于派生子类，所派生的子类不能访问超类的任何私用属性或方法。“继承破坏封装”。创建的类以后可能需要派生子类，那么最好还是采用前两种。</li>
+</ol>
+
+<h4 id="section-9">3.3 更多高级对象创建模式</h4>
+
+<h5 id="section-10">3.3.1 静态方法和属性</h5>
+
+<p>静态成员所关联的则是类本身。静态成员是在类的层次上操作，不是在实例的层次上操作。每个静态成员都只有一份，通过类对象访问。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Book</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//外层函数被用于创建一个可以用来存放静态私用成员的闭包</span>
+	<span class="c1">//private static attributes私有静态属性</span>
+	<span class="kd">var</span> <span class="nx">numOfBooks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="c1">//private static method</span>
+	<span class="kd">function</span> <span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">isbn</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+	
+	<span class="c1">//Return the constructor</span>
+
+	<span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">,</span> <span class="nx">newTitle</span><span class="p">,</span> <span class="nx">newAuthor</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Publication</span>
+		<span class="c1">//private attributes</span>
+		<span class="kd">var</span> <span class="nx">isbn</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">;</span>
+
+		<span class="c1">//privileged methods</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">getIsbn</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">isbn</span><span class="p">;</span>
+		<span class="p">};</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">checkIsbn</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">))</span> <span class="p">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book: Invalid ISBN&#39;</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="nx">isbn</span> <span class="o">=</span> <span class="nx">newIsbn</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="c1">//其他特权函数</span>
+
+		<span class="c1">//Constructor code</span>
+		<span class="nx">numOfBook</span><span class="o">++</span><span class="p">;</span>	<span class="c1">//利用私有静态属性跟踪有多少类被初始化</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="nx">numOfBooks</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Book: Only 50 instances of Book can be created&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="k">this</span><span class="p">.</span><span class="nx">setIsbn</span><span class="p">(</span><span class="nx">newIsbn</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="nx">newTitle</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">setAuthor</span><span class="p">(</span><span class="nx">newAuthor</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">})();</span>
+
+<span class="c1">//Public static method</span>
+<span class="nx">Book</span><span class="p">.</span><span class="nx">converToTitleCase</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">inputString</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//Public, non-privileged methods</span>
+<span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">display</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>经验法则：一个私用方法是否应该被设计为静态方法，看它是否需要访问任何实例数据。如果不需要，那么设计成静态方法更有效率。</p>
+
+<p>所有公用静态方法如果作为独立的函数来声明其实也同样简单，但最好还是像这样把相关行为集中在一起。这些方法用于与类这个整体相关的任务，而不是与类的任一特定实例相关的任务。并不直接依赖于对象中包含的任何数据。</p>
+
+<h5 id="section-11">3.3.2 常量</h5>
+
+<p>常量：不能被修改的变量。js中可以通过创建只有取值器而没有赋值器的私用变量来模仿常量。因为常量往往是在开发时进行设置，不因对象实例的不同而变化。将其作为私用静态属性设计。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Class</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//常量</span>
+	<span class="kd">var</span> <span class="nx">UPPER_BOUND</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+	
+	<span class="c1">//构造器</span>
+	<span class="kd">var</span> <span class="nx">ctor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">constructorArgument</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">};</span>
+	
+	<span class="c1">//特权静态方法,privileged static method</span>
+	<span class="nx">ctor</span><span class="p">.</span><span class="nx">getUPPER_BOUND</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">UPPER_BOUND</span><span class="p">;</span>
+	<span class="p">};</span>
+	<span class="c1">//...</span>
+	<span class="c1">//...</span>
+	<span class="c1">//返回构造器</span>
+	<span class="k">return</span> <span class="nx">ctor</span><span class="p">;</span>
+<span class="p">})();</span>
+
+<span class="c1">//获取参数</span>
+<span class="nx">Class</span><span class="p">.</span><span class="nx">getUPPER_BOUND</span><span class="p">();</span></code></pre></div>
+
+<p>需要许多常量，创建通用取值器</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Class</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//静态属性</span>
+	<span class="kd">var</span> <span class="nx">constants</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="nx">UPPER_BOUND</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+		<span class="nx">LOWER_BOUND</span><span class="o">:</span> <span class="o">-</span><span class="mi">100</span>
+	<span class="p">};</span>
+
+	<span class="c1">//构造器</span>
+	<span class="kd">var</span> <span class="nx">ctor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">constructorArgument</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">};</span>
+	<span class="nx">ctor</span><span class="p">.</span><span class="nx">getConstant</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">constants</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+	<span class="p">};</span>
+	<span class="c1">//...</span>
+	<span class="c1">//返回构造器	</span>
+	<span class="k">return</span> <span class="nx">ctor</span><span class="p">;</span>
+<span class="p">})();</span>
+
+<span class="c1">//获取参数</span>
+<span class="nx">Class</span><span class="p">.</span><span class="nx">getConstant</span><span class="p">(</span><span class="s1">&#39;UPPER_BOUND&#39;</span><span class="p">);</span></code></pre></div>
+
+<h5 id="section-12">3.3.3 单体和对象工厂</h5>
+
+<p>后面章节会讲</p>
+
+<h4 id="section-13">3.4 封装之利</h4>
+
+<blockquote>
+  <p>封装保护了内部数据的完整性。通过将数据的访问途径限制为取值器和赋值器两个方法，可以获得对取值和赋值的完全控制。这可以减少其他函数所需的错误检测代码的数量，并确保数据不会处于无效状态。</p>
+
+  <p>对象重构因此可以变得更轻松。可以随心所欲地修改对象内部使用的数据结构和算法</p>
+</blockquote>
+
+<h4 id="section-14">3.5 封装之弊</h4>
+
+<p>复杂化，私用方法难以单元测试。云云</p>
+
+<h4 id="section-15">3.6 小结</h4>
+
+<p>js封装技术。如果确信其他程序猿只会使用接口中规定的方法，或者并非迫切需要保持内部数据的完整性，使用门户大开型对象；命名规范可以用来引导其他程序猿。真正的私用成员，那就只能使用闭包。</p>
+
+<h3 id="section-16">4 继承</h3>
+
+<p>非常复杂的话题。js使用原型式继承（极大的优点？）。得益于语言的灵活性，既可以使用标准的基于类的继承，也可以使用原型式继承</p>
+
+<h5 id="section-17">4.1 为什么要继承</h5>
+
+<p>设计类的时候，希望减少重复性的代码，并尽量弱化对象间的耦合。</p>
+
+<p>继承符合前一个设计原则的需要。但可能会使得两个类强耦合。</p>
+
+<h5 id="section-18">4.2 类式继承</h5>
+
+<p>用函数声明类，关键字new创建实例</p>
+
+<p>譬如：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Class Person</span>
+
+<span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getName</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//首先创建构造函数。惯例，名称类名，首字母大写。结合new调用</span>
+
+<span class="kd">var</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s1">&#39;John Smith&#39;</span><span class="p">);</span>
+<span class="nx">reader</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span></code></pre></div>
+
+<h5 id="section-19">4.2.1 原型链</h5>
+
+<p>创建继承Person的类则要复杂一些：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Class Author</span>
+
+<span class="kd">function</span> <span class="nx">Author</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">books</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">Person</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>	<span class="c1">//调用超类的构造函数，并将绑定this</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">books</span> <span class="o">=</span> <span class="nx">books</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Author</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>	<span class="c1">//建立原型链</span>
+<span class="nx">Author</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Author</span><span class="p">;</span>	<span class="c1">//设置构造器属性</span>
+<span class="nx">Author</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getBooks</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">;</span>
+<span class="p">};</span></code></pre></div>
+
+<p>让一个类继承另一个类需要挺多行代码。</p>
+
+<p>首先创建一个构造函数，在构造函数中调用超类的构造函数，并将name参数传递给它。</p>
+
+<p><strong>需要注意的是：</strong>使用new运算符时，系统进行的事情：</p>
+
+<ul>
+  <li>创建一个空对象，并且this变量引用该对象，同时还继承了该函数的原型。</li>
+  <li>属性和方法被加入到this引用的对象中。</li>
+  <li>新创建的对象有this所引用，并且最后隐式的返回this</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">Base</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span></code></pre></div>
+
+<blockquote>
+  <p>首先创建一个空对象，然后调用构造函数，在此过程中这个空对象处于作用域链的最前端。而在Author函数中调用超类的构造函数时，你必须手工完成同样的任务。<code>Person.call(this, name);</code>这条语句调用了Person的构造函数，并且在此过程中让那个空对象（用this表示）处于作用域链的最前端，而name则被作为参数传入。</p>
+
+  <p>下一步是设置原型链。尽管相关代码比较简单，但这实际上是一个非常复杂的话题。JavaScript每个对象都有一个原型对象，但并不意味这每个对象都有一个prototype属性（实际上只有函数对象才有这个属性）。<strong>创建一个对象时，JS会自动将其原型对象设置为其构造函数的prototype属性所知的对象。</strong>应该注意的是，构造函数本身也是一个对象，其构造函数是Function。构造函数的原型对象实际上是Function.prototype所指的对象。在访问对象的某个成员时，如果这个成员未见与于当前对象，那么JS会在其原型对象中查找它，沿着原型链向上逐一访问每个原型对象，直到找到这个成员。这意味着为了让一个类继承另一个类，只需将子类的prototype设置为指向超类的一个实例即可。为了让Author继承Person，必须手工将Author的prototype设置为Person的一个实例</p>
+
+  <p>最后一个步骤是将prototype的constructor属性重设为Author（因为把prototype属性设置为Person的实例中，其constructor属性被抹除。）定义一个构造函数时，其默认的prototype对象是一个Object类型的实例，其constructor属性会被自动设置为该构造函数本身。如果手工将其prototype设置为另一个对象，那么新对象自然不会具有原对象的constructor值，所以需要重新设置constructor属性。</p>
+</blockquote>
+
+<p>由于上面的例子的超类名称固化在Author类的声明之中。更好的普适性的方法：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">extend</span><span class="p">(</span><span class="nx">subClass</span><span class="p">,</span> <span class="nx">superClass</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="p">};</span>
+	<span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">superClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+	<span class="nx">subClass</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
+	<span class="nx">subClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">subClass</span><span class="p">;</span>
+
+	<span class="c1">//提供superclass属性，弱化子类父类之间的耦合。</span>
+	<span class="c1">//确保超类的prototype的constructor属性被正确设置，即使超类是Object本身。</span>
+	<span class="nx">subClass</span><span class="p">.</span><span class="nx">superclass</span> <span class="o">=</span> <span class="nx">superClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">superClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">superClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">superClass</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Class Author</span>
+
+<span class="kd">function</span> <span class="nx">Author</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">books</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">Author</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">books</span> <span class="o">=</span> <span class="nx">books</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">extend</span><span class="p">(</span><span class="nx">Author</span><span class="p">,</span> <span class="nx">Person</span><span class="p">);</span>
+
+<span class="nx">Author</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getBooks</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">books</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">//superclass属性，可直接调用超类中的方法</span>
+
+<span class="nx">Author</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getName</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">Author</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">getName</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+	<span class="k">return</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;, Author of &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getBooks</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">);</span>
+<span class="p">};</span></code></pre></div>
+
+<h4 id="section-20">4.3 原型式继承</h4>
+
+<p>只从对象的角度思考。并不需要用类来定义对象的结构，只需直接创建一个对象即可。得益于原型链查找的工作机制。这个对象随后可以被新的对象重用。该对象被称为<strong>原型对象</strong>，为其他对象应有的模样提供了一个原型，正式原型式继承这个名称的又来。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;default name&#39;</span><span class="p">,</span>
+	<span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">//不需要使用构造函数</span>
+<span class="c1">//实例化</span>
+
+<span class="kd">var</span> <span class="nx">reader</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">Person</span><span class="p">);</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">getName</span><span class="p">());</span>
+<span class="nx">reader</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;John Smith&#39;</span><span class="p">;</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">getName</span><span class="p">());</span>
+
+<span class="c1">//clone函数用来创建新的类Person对象。创建一个空对象，其原型对象呗设置为Person</span>
+
+<span class="c1">//继承</span>
+<span class="c1">//Author Prototype Object</span>
+
+<span class="kd">var</span> <span class="nx">Author</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">Person</span><span class="p">);</span>
+<span class="nx">Author</span><span class="p">.</span><span class="nx">books</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Author</span><span class="p">.</span><span class="nx">getBooks</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">books</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">//实例化</span>
+<span class="kd">var</span> <span class="nx">author</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="nx">author</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">Author</span><span class="p">);</span>
+<span class="nx">author</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Dustin Diaz&#39;</span><span class="p">;</span>
+<span class="nx">author</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">books</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JavaScript Design Patterns&#39;</span><span class="p">];</span>
+
+<span class="nx">author</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">Author</span><span class="p">);</span>
+<span class="nx">author</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Ross Harmes&#39;</span><span class="p">;</span>
+<span class="nx">author</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">books</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JavaScript Design Patterns&#39;</span><span class="p">];</span>
+
+<span class="nx">author</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">getName</span><span class="p">();</span>
+<span class="nx">author</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">getBooks</span><span class="p">();</span></code></pre></div>
+
+<h5 id="section-21">4.3.1 对继承而来的成员的读和写的不对等性</h5>
+
+<blockquote>
+  <p>为了有效地使用原型式继承，你必须忘记有关类式继承的一切。在类式继承中，Author的每一个实例都有一份自己的books数组副本。你可以用代码<code>author[1].books.push('New Book Title')</code>为其添加元素。</p>
+
+  <p>但是对于使用原型式继承方式创建的类Author对象来说，由于原型链接的工作方式，这种做法并非一开始就能行得通。一个克隆并非其原型对象的一份完全独立的副本，它只是一个以哪个对象为原型对象的空对象而已。克隆刚被创建时，author[1].name其实是一个指向最初的Person.name的链接。对于从原型对象继承而来的成员，其读和写具有内在的不对等性。在读取author[1].name的值时，如果你还没有直接为author[1]实例定义name属性的话，那么所得到的是其原型对象的同名属性值。而在写入author[1].name的值时，你是在直接为author[1]对象定义一个新属性。</p>
+
+  <p>说明了为什么必须为通过引用传递的数据类型的属性创建新副本</p>
+</blockquote>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">authorClone</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">Author</span><span class="p">);</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">authorClone</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>	<span class="c1">//指向原先的Person.name</span>
+
+<span class="nx">authorClone</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;new name&#39;</span><span class="p">;</span>	<span class="c1">//name被创建并被添加到authorClone object自身</span>
+
+<span class="nx">alert</span><span class="p">(</span><span class="nx">authorClone</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>	<span class="c1">//指向authorClone.name</span>
+
+<span class="nx">authorClone</span><span class="p">.</span><span class="nx">books</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;new book&#39;</span><span class="p">);</span>	<span class="c1">//authorClone.books被链接到Author.books，这里修改了prototype object的默认值</span>
+
+<span class="nx">authorClone</span><span class="p">.</span><span class="nx">books</span> <span class="o">=</span> <span class="p">[];</span>	<span class="c1">//新的books被添加到authorClone自身</span>
+
+<span class="nx">authorClone</span><span class="p">.</span><span class="nx">books</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;push book&#39;</span><span class="p">);</span></code></pre></div>
+
+<p>有时原型对象也有自己的子对象。为了尽量弱化对象之间的耦合，任何复杂的子对象都应该使用方法创建。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">CompoundObject</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">string1</span><span class="o">:</span> <span class="s2">&quot;default value&quot;</span><span class="p">,</span>
+	<span class="nx">childObject</span><span class="o">:</span> <span class="p">{</span>
+		<span class="nx">bool</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+		<span class="nx">num</span><span class="o">:</span> <span class="mi">10</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">compoundObjectClone</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">CompoundObject</span><span class="p">);</span>
+
+<span class="c1">//Bad!修改了CompoundObject.childObject.num</span>
+<span class="nx">compoundObjectClone</span><span class="p">.</span><span class="nx">childObject</span><span class="p">.</span><span class="nx">num</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+<span class="c1">//Better.创建了一个新的Object，但必须知道object的结构，导致紧耦合</span>
+<span class="nx">compoundObjectClon</span><span class="p">.</span><span class="nx">childObject</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">bool</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+	<span class="nx">num</span><span class="o">:</span> <span class="mi">5</span>
+<span class="p">};</span>
+
+<span class="c1">//更好的办法，使用工厂方法来创建childObject</span>
+<span class="c1">//Best</span>
+<span class="kd">var</span> <span class="nx">CompoundObject</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">CompoundObject</span><span class="p">.</span><span class="nx">string1</span> <span class="o">=</span> <span class="s1">&#39;default value&#39;</span><span class="p">;</span>
+<span class="nx">CompoundObject</span><span class="p">.</span><span class="nx">createChildObject</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="nx">bool</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+		<span class="nx">num</span><span class="o">:</span> <span class="mi">10</span>
+	<span class="p">};</span>
+<span class="p">};</span>
+<span class="nx">CompoundObject</span><span class="p">.</span><span class="nx">childObject</span> <span class="o">=</span> <span class="nx">CompoundObject</span><span class="p">.</span><span class="nx">createChildObject</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">compoundObjectClone</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">compoundObject</span><span class="p">);</span>
+<span class="nx">compoundObjectClone</span><span class="p">.</span><span class="nx">childObject</span> <span class="o">=</span> <span class="nx">CompoundObject</span><span class="p">.</span><span class="nx">createChildObject</span><span class="p">();</span>
+<span class="nx">compoundObjectClone</span><span class="p">.</span><span class="nx">childObject</span><span class="p">.</span><span class="nx">num</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span></code></pre></div>
+
+<h5 id="clone">4.3.2 clone函数</h5>
+
+<p>clone函数首先创建一个新的空函数F，然后将F的prototype属性设置为作为参数object传入的原型对象。</p>
+
+<p>prototype属性就是用来指向原型对象的，通过原型链接机制，提供了到所有继承而来的成员的连接。</p>
+
+<p>函数所返回的这个克隆结果是一个以给定对象为原型对象的空对象。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">function</span> <span class="nx">F</span><span class="p">()</span> <span class="p">{</span>
+	<span class="p">}</span>
+	<span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">object</span><span class="p">;</span>
+	<span class="c1">//为什么不用</span>
+	<span class="c1">//F.prototype.constructor = F;</span>
+
+	<span class="k">return</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+
+<h4 id="section-22">4.4 类式继承和原型式继承的对比</h4>
+
+<p>大相径庭，各有有确定。判断特定场合应该使用哪一种。</p>
+
+<p>几乎所有用面向对象方式编写的js代码中都用到类式继承，设计众人使用的Api最后还是使用类式继承。</p>
+
+<p>在各种流行语言中只有js使用原型式继承，对象具有到自己的原型对象的反向链接。但高级js程序猿需要懂的原型式继承的工作机制</p>
+
+<p>原型式继承更能节约内存。在原型链查找成员的方式使得所有克隆出来的对象都共享每个属性和方法的唯一一份实例（上面也提到过）。原型继承显得更为简练。</p>
+
+<p>本书介绍的设计模式都可以应用于两种继承范型。但本书主要使用类式继承</p>
+
+<h4 id="section-23">4.5 继承与封装</h4>
+
+<p>封装对继承的影响。从现有类派生出一个子类时，只有公用和特权成员会被承袭下来。</p>
+
+<p>由于这个原因门户大开型类是最适合于派生子类的。所有成员公开，可遗传给子类，若要稍加隐藏，可使用下划线符号规范。</p>
+
+<p>派生具有真正的私用成员的类时，特权方法是公用，所以会被遗传下来。藉此可以在子类中间接访问父类的私用属性，但子类自身的实力方法都不能直接访问这些私用属性。</p>
+
+<p>不累的私用成员只能通过这些既有的特权方法进行访问，不能再子类中添加能够直接访问它们的新的特权方法。</p>
+
+<h4 id="section-24">4.6 掺元类</h4>
+
+<p>有一种重用代码的方法不需要用到严格的继承。把一个函数用到多个类中，可以通过扩充的方式让这些类共享该函数。</p>
+
+<p>实际做法：创建一个包含各种通用方法的类（掺元类），然后再用它扩充其他类。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Mixin类 掺元类</span>
+<span class="kd">var</span> <span class="nx">Mixin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">};</span>
+
+<span class="nx">Mixin</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+
+	<span class="c1">//遍历this对象的所有成员并将值组织为一个字符串输出</span>
+
+	<span class="nx">serialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="p">[];</span>
+		<span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">output</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">output</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">//扩充</span>
+<span class="nx">augment</span><span class="p">(</span><span class="nx">Author</span><span class="p">,</span> <span class="nx">Mixin</span><span class="p">);</span>	<span class="c1">//扩充函数，下面会提到</span>
+
+<span class="kd">var</span> <span class="nx">author</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Author</span><span class="p">(</span><span class="s1">&#39;Ross Harmes&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;JavaScript Design Patterns&#39;</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">serializedString</span> <span class="o">=</span> <span class="nx">author</span><span class="p">.</span><span class="nx">serialize</span><span class="p">();</span></code></pre></div>
+
+<p>Mixin类只有一个方法。可能在许多不同类型的类都会用到，但没必要让这些泪都继承Mixin，把这个方法的代码复制到这些类也并不明智。最好还是用augment函数把这个方法添加到每个需要它的类中。一个类可以用多个掺元类加以扩充，实际上实现了多继承的效果。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//augment函数</span>
+<span class="kd">function</span> <span class="nx">augment</span><span class="p">(</span><span class="nx">receivingClass</span><span class="p">,</span> <span class="nx">givingClass</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="nx">methodName</span> <span class="k">in</span> <span class="nx">givingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">receivingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">])</span> <span class="p">{</span>
+			<span class="nx">receivingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">givingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//改进，可复制其中的一两个方法</span>
+
+<span class="kd">function</span> <span class="nx">augment</span><span class="p">(</span><span class="nx">reveivingClass</span><span class="p">,</span> <span class="nx">givingClass</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="p">{</span>	<span class="c1">//给了确定的方法</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">receivingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">givingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="nx">methodName</span> <span class="k">in</span> <span class="nx">givingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">receivingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">])</span> <span class="p">{</span>
+				<span class="nx">receivingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">givingClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">methodName</span><span class="p">];</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//augment(Author, Mixin, &#39;serialize&#39;);</span></code></pre></div>
+
+<h4 id="section-25">4.7 示例： 就地编辑</h4>
+
+<p>提供了三种解决方案，演示了类式继承、原型式继承和掺元类的用法</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">EditInPlaceField</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">parent</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">||</span> <span class="s1">&#39;default value&#39;</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">parentElement</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">createElements</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attachEvents</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">EditInPlaceField</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">createElements</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">parentElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;button&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Save&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;button&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;Cancel&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">containerElement</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">converToText</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">attachEvents</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">addEvent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">convertToEditable</span><span class="p">();</span>
+        <span class="p">});</span>
+        <span class="nx">addEvent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+        <span class="p">});</span>
+        <span class="nx">addEvent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">that</span><span class="p">.</span><span class="nx">cancel</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">},</span>
+    <span class="nx">convertToEditable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">save</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getValue</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">callback</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">that</span><span class="p">.</span><span class="nx">convertToText</span><span class="p">();</span>
+            <span class="p">},</span>
+            <span class="nx">failure</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Error saving value&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="nx">ajaxRequest</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;save.php?id=&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&amp;value=&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">cancel</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">saveButton</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cancelButton</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">setValue</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">staticElement</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">getValue</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldElement</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">//创建一个就地编辑域，实例化这个类</span>
+
+<span class="kd">var</span> <span class="nx">titleClassical</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EditInPlaceField</span><span class="p">(</span><span class="s1">&#39;titleClassical&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;doc&#39;</span><span class="p">),</span> <span class="s1">&#39;Title Here&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">currentTitleText</span> <span class="o">=</span> <span class="nx">titleClassical</span><span class="p">.</span><span class="nx">getValue</span><span class="p">();</span></code></pre></div>
+
+<h1 id="section-26">参考书籍</h1>
+
+<p><a href="http://book.douban.com/subject/3329540/">JavaScript设计模式</a></p>
+
+<p><a href="http://book.douban.com/subject/2228378/">JavaScript权威指南</a></p>
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>

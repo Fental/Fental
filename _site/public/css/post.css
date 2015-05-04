@@ -1,0 +1,71 @@
+body {
+    background-color: #ccc;
+    font-size: 100%;
+    font-family: Geneva, SimSun, sans-serif;
+}
+body * {
+    font-size: 1em;
+}
+.page {
+    position: relative;
+    background-color: #fff;
+    max-width:60em;
+    padding: 1.253em 1.253em;
+    margin:1em auto;
+    border-radius: 1em;
+    box-shadow: .25em .25em #595959;
+}
+h1 {
+    font-size: 1.875em;
+}
+h2 {
+    font-size: 1.5em;
+}
+a {
+    color: #ccc;
+    text-shadow: .0625em .0625em #595959;
+    text-decoration: none;
+}
+a:hover {
+    color: #595959;
+}
+p {
+    line-height: 1.5;
+}
+blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    background-color: #ccc;
+    padding: .625em;
+    border-left: solid .25em #595959;
+}
+pre {
+    background-color: #ccc;
+    border:.125em dashed #595959;
+    padding: .625em;
+    overflow-x: auto;
+}
+pre code {
+    display: inline-block;
+    background-color: #ccc;
+}
+img.emoji {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.post-aside {
+    position: absolute;
+    left: 61em;
+    top: 0;
+    padding: .625em;
+}
+.post-aside div {
+    padding: .625em 1.25em;
+    margin-bottom: .625em;
+    background-color: #fff;
+    border-radius: .5em;
+    box-shadow: .25em 0 #595959;
+}

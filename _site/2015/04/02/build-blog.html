@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>我的博客——搭建过程</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="section">我的博客——搭建过程</h1>
+
+<h2 id="github">为什么要在Github上搭建静态博客系统</h2>
+
+<ol>
+  <li>相较于CSDN等博客，我觉得Github的个人定制空间比较大。</li>
+  <li>逼格…高</li>
+</ol>
+
+<h2 id="section-1">博客成型</h2>
+
+<p>根据阮一峰前辈的博文<a href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html">搭建一个免费的，无限流量的Blog—-github </a>搭建了一个最简单的blog。</p>
+
+<h2 id="section-2">充实博客</h2>
+
+<p>在编写之前，为文章的模板（_layout目录下的html文件）增加样式和插件功能。需要注意的地方：样式表和js文件路径使用绝对路径会好些。（为什么呢？个人猜测就是jekyll在转换文章的时候，文章的实际存放路径有变动？查查资料先。）</p>
+
+<ul>
+  <li>增加css样式，在模板文件中link一下:ghost：</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nt">body</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#cccccc</span><span class="p">;</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="err">宋体</span><span class="o">,</span> <span class="n">Geneva</span><span class="o">,</span> <span class="k">sans-serif</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">body</span> <span class="o">*</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.page</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+    <span class="k">max-width</span><span class="o">:</span><span class="m">60em</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">1.253em</span> <span class="m">.625em</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span><span class="m">1em</span> <span class="k">auto</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="m">.25em</span> <span class="m">.25em</span> <span class="m">#595959</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h1</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.875em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h2</span><span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.5em</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">blockquote</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#cccccc</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">.625em</span><span class="p">;</span>
+    <span class="k">border-left</span><span class="o">:</span> <span class="k">solid</span> <span class="m">.25em</span> <span class="m">#595959</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">pre</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#cccccc</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">:.</span><span class="m">125em</span> <span class="k">dashed</span> <span class="m">#595959</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">.625em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">img</span><span class="nc">.emoji</span> <span class="p">{</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+    <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
+    <span class="k">vertical-align</span><span class="o">:</span> <span class="k">top</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<ul>
+  <li>增加插件功能：评论（<a href="https://disqus.com/">disqus</a>）、<a href="https://github.com/hassankhan/emojify.js">emoji表情</a>、代码高亮（<a href="https://github.com/hugomaiavieira/pygments-style-github">pygments</a>）(具体操作见下篇博文。)</li>
+</ul>
+
+<h2 id="section-3">编写博客</h2>
+
+<p>进入_posts目录，创建文章。</p>
+
+<blockquote>
+  <p>文章就是普通的文本文件，文件名假定为2012-08-25-hello-world.html。（<strong>注意，文件名必须为“年-月-日-文章标题.后缀名”的格式</strong>。如果网页代码采用html格式，后缀名为html；如果采用<a href="http://daringfireball.net/projects/markdown/">mardown</a>格式，后缀名为md。）</p>
+</blockquote>
+
+<pre><code>---
+layout: default
+title: 你好，世界
+---
+&lt;h2&gt;我的博客——搭建过程&lt;/h2&gt;
+&lt;p&gt;我的第一篇文章&lt;/p&gt;
+&lt;p&gt;02 Apr 2015&lt;/p&gt;
+</code></pre>
+
+<blockquote>
+  <p>每篇文章的头部，必须有一个yaml文件头，用来设置一些元数
+据。它用三根短划线”—“，标记开始和结束，里面每一行设置一种元数据。”layout:default”，表示该文章的模板使用_layouts目录下的default.html文件；”title: 你好，世界”，表示该文章的标题是”你好，世界”，如果不设置这个值，默认使用嵌入文件名的标题，即”hello world”。
+在yaml文件头后面，就是文章的正式内容，里面可以使用模板变量。我的博客——搭建过程就是文件头中设置的”你好，世界”，2015-04-02 00:00:00 +0800则是嵌入文件名的日期（也可以在文件头重新定义date变量），”| date_to_string”表示将page.date变量转化成人类可读的格式。</p>
+</blockquote>
+
+<p>我使用markdownpad2编写博客，=。=</p>
+
+<h2 id="section-4">上传博文</h2>
+
+<p>熟悉几个git操作：</p>
+
+<ul>
+  <li>git add -A</li>
+  <li>git commit -m “update message”</li>
+  <li>git push origin gh-pages</li>
+</ul>
+
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>

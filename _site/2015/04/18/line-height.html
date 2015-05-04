@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>line-height</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="section">2015-04-18 的收获</h1>
+
+<h2 id="cssline-height">深入理解css的行高line-height属性</h2>
+
+<p>行间距：用来控制行与行垂直距离。</p>
+
+<p>如何使用？</p>
+
+<p>默认状态，浏览器使用1.0-1.2 line-height，可定义该属性覆盖初始值。</p>
+
+<pre><code>p {
+	line-height: 140%;
+}
+</code></pre>
+
+<h3 id="section-1">5种方式定义：</h3>
+
+<pre><code>1. body {line-height: normal;}
+2. body {line-height: inherit;}
+3. body {line-height: 120%;}
+4. body {line-height: 25px;}	/*单位可以是px, em等*/
+5. body {line-height: 1.2;}
+</code></pre>
+
+<h3 id="line-height">缩写line-height</h3>
+
+<p>line-height写法可在font属性中缩写。line-height的值紧跟font-size值，使用斜杠分开。</p>
+
+<pre><code>body {font: 100%/normal arial, SimSun, sans-serif;}
+body {font: 100%/120% arial, SimSun, sans-serif;}
+...
+</code></pre>
+
+<h3 id="line-height-1">计算line-height</h3>
+
+<p>line-height可继承，但line-height的继承有点复杂</p>
+
+<h4 id="section-2">1. 百分比</h4>
+
+<pre><code>body {
+	font-size: 16px;
+	line-height: 120%;
+}
+h1 {
+	font-size:32px;
+}
+p {
+	font-size: 16px;
+}
+#footer {
+	font-size: 12px;
+}
+</code></pre>
+
+<p>line-height 的百分比和body的文字大小被用来计算line-height的值：16*120%=19.2px，这个计算出来的值会被层叠下去的元素所继承，继承下来的元素会忽略本身的font-size，使用<strong>相同的计算出来的line-height</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>elememt</th>
+      <th>font-size</th>
+      <th>line-height</th>
+      <th>计算后的line-height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>body</td>
+      <td>16px</td>
+      <td>120%</td>
+      <td>16px*120px=19.2px</td>
+    </tr>
+    <tr>
+      <td>h1</td>
+      <td>32px</td>
+      <td>继承，19.2px</td>
+      <td>19.2px</td>
+    </tr>
+    <tr>
+      <td>p</td>
+      <td>16px</td>
+      <td>继承，19.2px</td>
+      <td>19.2px</td>
+    </tr>
+    <tr>
+      <td>#footer</td>
+      <td>12px</td>
+      <td>继承，19.2px</td>
+      <td>19.2px</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>line-height不会随着相关的font-size做相应的比例缩放</p>
+
+<h4 id="section-3">2. 长度</h4>
+
+<pre><code>...
+line-height: 20px;
+...
+</code></pre>
+
+<p>长度值20px被后代元素继承，所有继承下来的元素会忽略本身的font-size，而使用相同的，继承的line-height</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>elememt</th>
+      <th>font-size</th>
+      <th>line-height</th>
+      <th>计算后的line-height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>body</td>
+      <td>16px</td>
+      <td>20px</td>
+      <td>20px</td>
+    </tr>
+    <tr>
+      <td>h1</td>
+      <td>32px</td>
+      <td>继承，20px</td>
+      <td>20px</td>
+    </tr>
+    <tr>
+      <td>p</td>
+      <td>16px</td>
+      <td>继承，20px</td>
+      <td>20px</td>
+    </tr>
+    <tr>
+      <td>#footer</td>
+      <td>12px</td>
+      <td>继承，20px</td>
+      <td>20px</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>line-height依然不会苏浙相关的font-size做相应的比例缩放</p>
+
+<h4 id="normal">3. normal</h4>
+
+<pre><code>...
+line-height: normal;	/*约为1.2*/
+...
+</code></pre>
+
+<p>现在所有继承下来的元素<strong>不会</strong>忽略本身font-size，使用基于font-size算出来的line-height</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>elememt</th>
+      <th>font-size</th>
+      <th>line-height</th>
+      <th>计算后的line-height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>body</td>
+      <td>16px</td>
+      <td>normal</td>
+      <td>16*1.2</td>
+    </tr>
+    <tr>
+      <td>h1</td>
+      <td>32px</td>
+      <td>normal</td>
+      <td>32*1.2</td>
+    </tr>
+    <tr>
+      <td>p</td>
+      <td>16px</td>
+      <td>normal</td>
+      <td>16*1.2</td>
+    </tr>
+    <tr>
+      <td>#footer</td>
+      <td>12px</td>
+      <td>normal</td>
+      <td>12*1.2</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>既想normal的灵活，又想要设置一个自定义的值，可使用纯数字</p>
+
+<h4 id="section-4">4. 纯数字</h4>
+
+<pre><code>...
+line-height: 1.5;
+...
+</code></pre>
+
+<p>现在所有继承下来的元素使用基于font-size算出来的line-height</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>elememt</th>
+      <th>font-size</th>
+      <th>line-height</th>
+      <th>计算后的line-height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>body</td>
+      <td>16px</td>
+      <td>1.5</td>
+      <td>16*1.5</td>
+    </tr>
+    <tr>
+      <td>h1</td>
+      <td>32px</td>
+      <td>1.5</td>
+      <td>32*1.5</td>
+    </tr>
+    <tr>
+      <td>p</td>
+      <td>16px</td>
+      <td>1.5</td>
+      <td>16*1.5</td>
+    </tr>
+    <tr>
+      <td>#footer</td>
+      <td>12px</td>
+      <td>1.5</td>
+      <td>12*1.5</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="section-5">小总结</h3>
+
+<p>一般，设置行高为纯数字是比较理想的方式，因为其会随着对应font-size缩放。在多种情况下很难确定完美的line-height。</p>
+
+<p>万维网内容可取性指南规定：</p>
+
+<blockquote>
+  <p>段落中的行距至少要1.5倍</p>
+</blockquote>
+
+<h3 id="line-height-2">深入line-height</h3>
+
+<h4 id="css-boxes">1. 了解css boxes的各种类型</h4>
+
+<pre><code>&lt;p&gt;
+	the &lt;em&gt;emphasis&lt;/em&gt; element is defined as "inline"
+&lt;/p&gt;
+</code></pre>
+
+<p>上述例子涉及四种boxes</p>
+
+<h5 id="containing-boxboxes">1.1 containing box(包含其他boxes)</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/containing-box.png" alt="cotaining box" /></p>
+
+<h5 id="inline-box">1.2 inline box(不会让内容显示成块形式，二是排成一排)</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/inline-box.png" alt="inline box" /></p>
+
+<p>em元素就是一种inline box，其他没有特别标签的box被称为匿名inline boxes</p>
+
+<h5 id="line-boxinline-boxescontaining-boxline-boxes">1.3 line box(inline boxes在containing box里一个接一个组成line boxes)</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-box.png" alt="line-box" /></p>
+
+<h5 id="content-areaboxfont-size">1.4 content area(围绕着文字的看不见的一种box,高度取决于font-size)</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/content-area.png" alt="content-area" /></p>
+
+<h4 id="section-6">2. 简单原则</h4>
+
+<h5 id="line-heightfont-size">2.1 line-height和font-size的差别</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-height-font-size.png" alt="line-height-font-size" /></p>
+
+<h5 id="section-7">2.2 拆分行间距，创建一个“半行间距”</h5>
+
+<pre><code>4px行间距 / 2 = 2px半行间距
+</code></pre>
+
+<h5 id="content-area">2.3 半行间距会被应用在content area的顶部和底部</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/half-line-height.png" alt="half-line-height" /></p>
+
+<h4 id="section-8">3. 有时候有点复杂</h4>
+
+<p>inline box包裹着content box，半行间距位于content box的上部和下部</p>
+
+<h5 id="inline-boxcontent-area">3.1 若inline box小于content area</h5>
+
+<p>举例来说，如果line-height小于font-size，inline box会优先于行高</p>
+
+<pre><code>例如：font-size: 16px;
+	line-height: 16px;/*inline box 高度12px*/
+</code></pre>
+
+<p>content area会溢出inline box的顶部和底部，半行高会折叠起来以保证inline box的高度。</p>
+
+<p><img src="http://fental.github.io/Fental/images/post/special.png" alt="special" /></p>
+
+<h4 id="line-box-">4.line-box 高度注解</h4>
+
+<h5 id="line-boxinline-box">4.1 line box高度取决于内部最高的inline box（或被替换的元素）</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/normal-line-box.png" alt="normal-line-box" /></p>
+
+<h5 id="inline-box-inline-boxline-heightinline-box">4.2 最高的inline box 可以是匿名inline box，也可以是增加line-height后的inline box</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-box-with-line-height.png" alt="line-box-with-line-height" /></p>
+
+<h5 id="font-sizeinline-box">4.3 还可以是更大font-size的inline box</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-box-with-font-size.png" alt="line-box-with-font-size" /></p>
+
+<h5 id="section-9">4.4 存在上标或下标</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-box-with-label.png" alt="line-box-with-label" /></p>
+
+<h5 id="section-10">4.5 存在替换元素，例如一张图</h5>
+
+<p><img src="http://fental.github.io/Fental/images/post/line-box-instead-ele.png" alt="line-box-instead-ele" /></p>
+
+<h2 id="section-11">参考链接</h2>
+
+<p><a href="http://www.cnblogs.com/fengzheng126/archive/2012/05/18/2507632.html">深入了解css的行高Line Height属性</a></p>
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>

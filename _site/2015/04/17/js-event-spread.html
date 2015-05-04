@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>js的事件冒泡和捕获</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="js">js的事件冒泡和捕获</h1>
+
+<ol>
+  <li>冒泡型事件：时间按照从最特定的事件目标到最不特定的事件目标（document）的顺序触发</li>
+  <li>捕获型事件：事件从最不精确的对象（document）开始触发，然后到最精确（可以在窗口级别捕获事件，不过必须由开发人员特别指定）。</li>
+  <li>DOM事件流同时支持两种事件模型：捕获型事件和冒泡型事件。捕获型事件先发生。两种事件流会触及DOM中的所有对象，从document对象开始，也在document对象结束。</li>
+</ol>
+
+<p>支持w3c标准的浏览器再添加事件时用addEventListener(event, fn, useCature)方法，第三个参数是Boolean值，用来设置事件是在事件捕获时执行，还是在事件冒泡时执行。</p>
+
+<p>不兼容W3C标准的浏览器（IE）用attachEvent()方法，此方法没有相关设置，默认在事件冒泡时执行。</p>
+
+<p>所以，在处理事件时把useCapture设置为false比较安全，也实现兼容浏览器的效果。</p>
+
+<p>传统的绑定事件方式：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">ele</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">doSomething2</span><span class="p">;</span></code></pre></div>
+
+<p>采用事件冒泡方式。
+下面例子执行结果//12453</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="c1">//        alert(&#39;fuck&#39;);</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">handler1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">handler2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">handler3</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;3&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">handler4</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">handler5</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;5&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+<span class="c1">//    console.log(a.addEventListener);</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;e&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">);</span>
+<span class="c1">//    a.addEventListener(&quot;click&quot;, handler, false);</span>
+<span class="nx">a</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">handler1</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="c1">//    b.addEventListener(&quot;click&quot;, handler, false);</span>
+<span class="nx">b</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">handler2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">c</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">handler3</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="c1">//    c.addEventListener(&quot;click&quot;, handler, true);</span>
+<span class="c1">//    d.addEventListener(&quot;click&quot;, handler, false);</span>
+<span class="nx">d</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">handler4</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">e</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">handler5</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="c1">//    f.addEventListener(&quot;click&quot;, handler, true);</span>
+<span class="c1">//    document.body.addEventListener(&quot;click&quot;, handler, true);</span></code></pre></div>
+
+<p>事件的传播是可以阻止的。</p>
+
+<ol>
+  <li>w3c中，使用stopPropagation()方法</li>
+  <li>IE下设置cancelBubble = true;</li>
+</ol>
+
+<p>在捕获的过程中，stopPropagation();后，后面的冒泡过程也不会发生</p>
+
+<p>阻止事件的默认行为，例如click a 后跳转</p>
+
+<ol>
+  <li>w3c中，使用preventDefault()方法，IE中设置</li>
+  <li>window.event.returnValue = false;</li>
+</ol>
+
+<p>不是所有事件都能冒泡。例如，blur focus load unload</p>
+
+<h1 id="section">参考链接</h1>
+
+<p><a href="http://blog.csdn.net/Tender001/article/details/44589501">js事件冒泡和事件捕获详细介绍</a></p>
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>

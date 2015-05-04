@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+　　<head lang="zh-zmn-Hans">
+    <meta charset="utf-8">
+    <title>JavaScript设计模式 1-2章</title>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/post.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/syntax.css"/>　　
+    <link rel="stylesheet" href="http://fental.github.io/Fental/public/css/emojify.css" />
+    </head>
+　　<body>
+        <div class="page">
+　　　　    <main>
+            <h1 id="js">JS设计模式读书笔记</h1>
+
+<p>这本书在各种设计模式的实现没有实现原型式继承，而是选择类式继承。个人口味问题？</p>
+
+<blockquote>
+  <p>有些人似乎天生就容易被原型是继承的简洁性吸引，而另一些人却对更面熟的类式继承情有独钟。</p>
+</blockquote>
+
+<h2 id="js-1">一. 面向对象的js</h2>
+
+<h3 id="js-2">1. 富有表现力的js</h3>
+
+<h4 id="js-3">1.1 js的灵活性</h4>
+
+<p>js对强大的特性是其灵活性。允许模仿其他语言的编程模式的惯用法，也有自己的编程模式和惯用法。</p>
+
+<p>用不同方法完成同样任务：启动和停止一个动画</p>
+
+<p>惯用过程式的程序设计：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">startAnimation</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">stopAnimation</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">}</span></code></pre></div>
+
+<p>面向对象</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Anim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//Usage</span>
+
+<span class="kd">var</span> <span class="nx">myAnim</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Anim</span><span class="p">();</span>
+<span class="nx">myAnim</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+<span class="c1">//...</span>
+<span class="nx">myAnim</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span></code></pre></div>
+
+<p>上述代码定义了名为Anim的类，并把方法赋给类的prototype属性</p>
+
+<p>还可以改用下面代码：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">Anim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">},</span>
+	<span class="nx">stop</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+		<span class="c1">//...</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p>还可以这样:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//为函数类添加新方法</span>
+
+<span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">Anim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">});</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">});</span></code></pre></div>
+
+<p>使用级联（链式调用）</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">method</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//...</span>
+
+<span class="nx">Anim</span><span class="p">.</span><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">method</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">});</span></code></pre></div>
+
+<h4 id="section">1.2 弱类型语言</h4>
+
+<p>（参考权威指南第六版 第三章）</p>
+
+<p>原始类型： boolean number string （不区分整数和浮点数）</p>
+
+<p>对象类型： object（“名/值对”的无序集合。数组、函数是特殊的对象类型）</p>
+
+<p>特殊原始值： 空（null）、未定义（undefined）…</p>
+
+<p>js除了数值、字符串、布尔值、null、undefined之外就是对象。</p>
+
+<p>原始类型之间的类型转换:</p>
+
+<p>数值、布尔值-&gt;字符串： toString()</p>
+
+<p>字符串-&gt;数值： parseInt()、parseFloat()</p>
+
+<p>字符串、数值-&gt;布尔值： 双重非。var bool = !!num;</p>
+
+<h4 id="section-1">1.3 函数是一等对象</h4>
+
+<p>匿名函数、IIFE、闭包</p>
+
+<h4 id="section-2">1.4 对象的易变性</h4>
+
+<p>js中，一切都是对象（除了那三种原始数据类型。即便是这些类型，在必要的时候也会自动包装为对象。整个过程看起来就像： js引用原始数据类型的属性时，会通过调用new String(s)、new Number(n)、new Boolean(b)的方式转换为对象，用来处理属性的引用。属性引用结束，新创建对象销毁。参考权威指南第六版 3.6 包装对象。）</p>
+
+<p>js所有对象易变(mutable)，对先前定义的类和实例化的对象进行修改（大多数别的语言不允许的技术。）</p>
+
+<p>js可以在运行时检查对象所具有的属性和方法，还可以使用这种信息动态实例化类和执行其方法（反射）。本书用来模仿传统的面向对象特性的技术都依赖于对象的易变性和反射。</p>
+
+<h4 id="section-3">1.5 继承</h4>
+
+<p>基于对象（原型式）继承；可模仿基于类的继承。编写代码时哪种都行，根据手头任务实际情况。</p>
+
+<h4 id="js-4">1.6 js中的设计模式</h4>
+
+<p>本书专门讨论四人帮的设计模式在js中的应用</p>
+
+<h4 id="section-4">1.7小结</h4>
+
+<p>js语言灵活性、弱语言、设计模式</p>
+
+<h3 id="section-5">2. 接口</h3>
+
+<p>“针对接口而不是实现编程”，js没有内置的创建或实现接口的方法，也没有内置的方法用于判断一个对象是否实现了与另一个对象相同的一套方法。</p>
+
+<p>但，利用js的灵活性可以添加这些特性</p>
+
+<h4 id="section-6">2.1 什么是接口</h4>
+
+<p>提供一种用以说明一个对象应该具有哪些方法的手段。但并不规定这些方法如何实现。</p>
+
+<h5 id="section-7">2.1.1 接口之利</h5>
+
+<p>一方面，自我描述，促进代码重用。接口告诉程序猿一个类实现了哪些方法；另一方面，助于稳定不同类之间的通信方式，定义接口，集成两个对象时减少问题。</p>
+
+<h5 id="section-8">2.1.2 接口之弊</h5>
+
+<p>js实现接口会对性能造成一些影响，归咎于额外方法开销；无法强迫其他程序猿遵循你定义的接口。js中没有Interface这个关键词</p>
+
+<h4 id="section-9">2.2 其他面向对象语言处理接口的方式</h4>
+
+<p>java、php、c#在实现接口时，漏掉任何一个方法都会导致编译时显示错误。</p>
+
+<h4 id="js-5">2.3 在js中模仿接口</h4>
+
+<p>三种方法： 注释法、属性检查法、鸭式辨型法。没有完美的技术，但三者结合基本令人满意</p>
+
+<h5 id="section-10">2.3.1 注释法</h5>
+
+<p>最简单，效果最差。这种方法模仿其他面向对象语言中的做法，使用interface和implements关键字，但放在注释中，以免引起语法错误。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="cm">/*</span>
+
+<span class="cm">interface Composite {</span>
+<span class="cm">	function add(child);</span>
+<span class="cm">	function remove(child);</span>
+<span class="cm">	function getChild(index);</span>
+<span class="cm">}</span>
+
+<span class="cm">interface FormItem {</span>
+<span class="cm">	function save();</span>
+<span class="cm">}</span>
+
+<span class="cm">*/</span>
+
+<span class="kd">var</span> <span class="nx">CompositeForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Composite, FormItem</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//Implement the Composite interface.</span>
+
+<span class="nx">CompositeForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">CompositeForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="nx">CompositeForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getChild</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//Implement the FormItem interface</span>
+
+<span class="nx">CompositeForm</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span></code></pre></div>
+
+<p>模仿效果不好，没有检查CompositeForm是否真正实现了正确的方法集，实现全靠自觉</p>
+
+<h5 id="section-11">2.3.2 用属性检查模仿接口</h5>
+
+<p>所有类都明确地声明自己实现了哪些接口，那些想与这些类打交道的对象可以针对这些声明进行检查，接口自身仍然只是注释，但可通过检查一个属性得知某个类自称实现了什么接口：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="cm">/*</span>
+
+<span class="cm">interface Composite {</span>
+<span class="cm">	function add(child);</span>
+<span class="cm">	function remove(child);</span>
+<span class="cm">	function getChild(index);</span>
+<span class="cm">}</span>
+
+<span class="cm">interface FormItem {</span>
+<span class="cm">	function save();</span>
+<span class="cm">}</span>
+
+<span class="cm">*/</span>
+
+<span class="kd">var</span> <span class="nx">CompositeForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">implementsInterfaces</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Composite&#39;</span><span class="p">,</span> <span class="s1">&#39;FormItem&#39;</span><span class="p">];</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//...</span>
+
+<span class="kd">function</span> <span class="nx">addForm</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="kr">implements</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">,</span> <span class="s1">&#39;Composite&#39;</span><span class="p">,</span> <span class="s1">&#39;FormItem&#39;</span><span class="p">))</span> <span class="p">{</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Object does not implement a required interface.&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="c1">//...</span>
+<span class="p">}</span>
+
+<span class="c1">//implements function 用来检查一个对象是否实现需要实现的接口</span>
+
+<span class="kd">function</span> <span class="kr">implements</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		
+		<span class="kd">var</span> <span class="nx">interfaceName</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+		<span class="kd">var</span> <span class="nx">interfaceFound</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">object</span><span class="p">.</span><span class="nx">implementsInterfaces</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">implementsInterfaces</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">==</span> <span class="nx">interfaceName</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">interfaceFound</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">interfaceFound</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>	<span class="c1">//有一个接口未实现</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>宣称自己实现了Compsite和FormItem接口，做法是将两个接口的名称加入一个数组中。任何一个要求其参数属于特定类型的函数都可以对这个属性进行检查，并在所需接口未在声明之列时抛出错误。</p>
+
+<p>优点： 对类所实现的接口提供文档声明。需要的接口不再类宣称支持的接口之类，会看到错误。</p>
+
+<p>缺点： 为确保类真正实现了自称实现的接口。</p>
+
+<h5 id="section-12">2.3.3 用鸭式辨型模仿接口</h5>
+
+<p>类是否声明自己支持哪些接口不重要，只要具有接口中的方法就行。</p>
+
+<blockquote>
+  <p>像鸭子一样走路并且嘎嘎叫的就是鸭子。</p>
+</blockquote>
+
+<p>把对象实现的方法集作为判断它是不是某个类的实例的唯一标准。如果对象具有与接口定义的方法同名的所有方法，那么就可以认为它实现了这个接口。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Interfaces，本书定义的Interface类</span>
+
+<span class="kd">var</span> <span class="nx">Composite</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;Composite&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="s1">&#39;getChild&#39;</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">FormItem</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;FormItem&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]);</span>
+
+<span class="c1">//CompositeForm class</span>
+
+<span class="kd">var</span> <span class="nx">CompositeForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//...</span>
+
+<span class="kd">function</span> <span class="nx">addForm</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">ensureImplements</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">,</span> <span class="nx">Composite</span><span class="p">,</span> <span class="nx">FormItem</span><span class="p">);</span>
+	<span class="c1">//如果接口的方法没有被实现，这个函数将会抛出错误</span>
+	<span class="c1">//...</span>
+<span class="p">}</span></code></pre></div>
+
+<p>鸭式辨型不借助注释。虽然是三种方法最有用（检查了接口的方法在类中是否都实现），但不声明自己实现哪些接口，降低代码可重用性，也缺乏自我描述性。同时需要使用辅助类（Interface）和辅助函数（ensureImplements）…</p>
+
+<h4 id="section-13">2.4 本书的接口实现方式</h4>
+
+<p>注释法和鸭式辨型结合。用注释声明类支持的接口，从而提高代码的可重用性和文档的完善性；用辅助类Interface及其类方法Interface.ensureImplements进行显示检查。</p>
+
+<p>实例：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Interfaces</span>
+
+<span class="kd">var</span> <span class="nx">Composite</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;Composite&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="s1">&#39;getChild&#39;</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">FormItem</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;FormItem&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]);</span>
+
+<span class="c1">//CompositeForm class</span>
+
+<span class="kd">var</span> <span class="nx">CompositeForm</span> <span class="o">=</span> <span class="nx">functio</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>	<span class="c1">//implements Composite, FormItem</span>
+	<span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">//...</span>
+<span class="kd">function</span> <span class="nx">addForm</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">Interface</span><span class="p">.</span><span class="nx">ensureImplements</span><span class="p">(</span><span class="nx">formInstance</span><span class="p">,</span> <span class="nx">Composite</span><span class="p">,</span> <span class="nx">FormItem</span><span class="p">);</span>
+
+	<span class="c1">//...</span>
+<span class="p">}</span></code></pre></div>
+
+<h4 id="interface">2.5 Interface类</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//Constructor </span>
+
+<span class="kd">var</span> <span class="nx">Interface</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">methods</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Interface constructor called with&#39;</span> <span class="o">+</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39;arguments, but expected exactly 2.&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">methods</span> <span class="o">=</span> <span class="p">[];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">methods</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">methods</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Interface constructor expects method names to be passed in as a string&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">methods</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+	<span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">//Static class method</span>
+
+<span class="nx">Interface</span><span class="p">.</span><span class="nx">ensureImplements</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Function Interface.ensureImplements called with&#39;</span> <span class="o">+</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39;arguments, but expected at least 2.&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="kr">interface</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+		<span class="k">if</span> <span class="p">(</span><span class="kr">interface</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">!==</span> <span class="nx">Interface</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Function Interface.ensurImplements expects arguments two and above to be instances of Interface.&#39;</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">methodsLen</span> <span class="o">=</span> <span class="kr">interface</span><span class="p">.</span><span class="nx">methods</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">methodsLen</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="kr">interface</span><span class="p">.</span><span class="nx">methods</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Function Interface.ensurImplements: object does not implement the &#39;</span> <span class="o">+</span> <span class="kr">interface</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; interface.Methods &#39;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s1">&#39;was not found&#39;</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<h5 id="interface-1">2.5.1 Interface类的使用场合</h5>
+
+<p>接口可以降低对象间的耦合度，提高代码灵活性。既能向函数传递任何类型的参数，又能保证它只会使用那些具有必要方法的对象。某些场合下接口很有用处。</p>
+
+<p>有时候无法直接控制代码的情况，譬如使用各种服务的API。有可能会发生变化。一种应对策略是为所依赖的每个API创建Interface对象</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">DynamicMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;DynamicMap&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;centerOnPoint&#39;</span><span class="p">,</span> <span class="s1">&#39;zoom&#39;</span><span class="p">,</span> <span class="s1">&#39;draw&#39;</span><span class="p">]);</span>
+
+<span class="kd">function</span> <span class="nx">displayRoute</span><span class="p">(</span><span class="nx">mapInstance</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">Interface</span><span class="p">.</span><span class="nx">ensureImplements</span><span class="p">(</span><span class="nx">mapInstance</span><span class="p">,</span> <span class="nx">DynamicMap</span><span class="p">);</span>
+	<span class="nx">mapInstance</span><span class="p">.</span><span class="nx">centerOnPoint</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">34</span><span class="p">);</span>
+	<span class="nx">mapInstance</span><span class="p">.</span><span class="nx">zoom</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+	<span class="nx">mapInstance</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+	<span class="c1">//...</span>
+<span class="p">}</span></code></pre></div>
+
+<h5 id="interface-2">2.5.2 Interface类的用法</h5>
+
+<p>判断使用接口是否华萱是最重要（也是最困难）的一步。权衡利弊</p>
+
+<ol>
+  <li>将interface类引入html中</li>
+  <li><strong>逐一检查代码中所有以对象为参数的方法。搞清代码的正常运转要求这些对象参数具有哪些方法</strong></li>
+  <li>为你需要的每一个不同的方法集创建一个Interface对象。</li>
+  <li><strong>剔除所有针对构造器的显式检查。因为用的是鸭式辨型，对象的类型不再重要</strong></li>
+  <li>以Interface.ensureImplements取代原来构造器的检查</li>
+</ol>
+
+<p>降低耦合度，不再依赖对象。</p>
+
+<h5 id="section-14">2.5.3 示例</h5>
+
+<p>创建一个类，可以将一些自动化测试结果转化为适用于在网页上查看的格式。</p>
+
+<p>该类的构造器以一个TestResult类的实例为参数。它会应客户的请求对这个TestResult对象所封装的数据格式化，然后输出。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//未使用接口</span>
+
+<span class="kd">var</span> <span class="nx">ResultFormatter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">resultsObject</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">resultsObject</span> <span class="nx">instanceOf</span> <span class="nx">TestResult</span><span class="p">))</span> <span class="p">{</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;ResultsFormatter: constructor requires an instance of TestResult as an argument&#39;</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">resultsObject</span> <span class="o">=</span> <span class="nx">resultsObject</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">ResultFormatter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">renderResult</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	
+	<span class="kd">var</span> <span class="nx">dataOfTest</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">resultsObject</span><span class="p">.</span><span class="nx">getDate</span><span class="p">();</span>
+	<span class="kd">var</span> <span class="nx">resultsArray</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">resultsObject</span><span class="p">.</span><span class="nx">getResults</span><span class="p">();</span>
+
+	<span class="kd">var</span> <span class="nx">resultsContainer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+	
+	<span class="kd">var</span> <span class="nx">resultsHeader</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;h3&#39;</span><span class="p">);</span>
+	<span class="nx">resultsHeader</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;Test Results from&#39;</span> <span class="o">+</span> <span class="nx">dateOfTest</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">();</span>
+	<span class="nx">resultsContainer</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">resultsHeader</span><span class="p">);</span>
+
+	<span class="kd">var</span> <span class="nx">resultsList</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">);</span>
+	<span class="nx">resultsContainer</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">resultsList</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">resultsArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">listItem</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">);</span>
+		<span class="nx">listItem</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">resultsArray</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+		<span class="nx">resultsList</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">listItem</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">resultsContainer</span><span class="p">;</span>
+<span class="p">};</span></code></pre></div>
+
+<p>该类的构造器对参数进行检查，确保了为TestResult类，但无法保证是否实现了getDate()、getResults()；同时加了限制条件，参数不允许使用其他类的实力作参数。</p>
+
+<p>解决方案：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ResultSet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Interface</span><span class="p">(</span><span class="s1">&#39;ResultSet&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">,</span> <span class="s1">&#39;getResults&#39;</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">ResultFormatter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">resultsObject</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">Interface</span><span class="p">.</span><span class="nx">ensureImplements</span><span class="p">(</span><span class="nx">resultsObject</span><span class="p">,</span> <span class="nx">ResultSet</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">resultsObject</span> <span class="o">=</span> <span class="nx">resultsObject</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">ResultFormatter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">renderResults</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">};</span></code></pre></div>
+
+<p>检查变得更准确，参数变得更宽容</p>
+
+<h4 id="section-15">2.6 依赖于接口的设计模式</h4>
+
+<ol>
+  <li>工厂模式</li>
+  <li>组合模式</li>
+  <li>装饰者模式</li>
+  <li>命令模式</li>
+</ol>
+
+<h4 id="section-16">2.7 小结</h4>
+
+<p>接口在流行的面向对象语言中的使用和实现方式；js实现接口</p>
+
+<h1 id="section-17">参考书籍</h1>
+
+<p><a href="http://book.douban.com/subject/3329540/">JavaScript设计模式</a></p>
+
+<p><a href="http://book.douban.com/subject/2228378/">JavaScript权威指南</a></p>
+
+            </main>
+            <aside class="post-aside">
+                <div><a href="http://fental.github.io/Fental/">回到主页</a></div>
+            </aside>
+        </div>
+        <div id="disqus_thread" class="page"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+        <script src="http://fental.github.io/Fental/public/js/emojify.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/public.js"></script>
+        <script src="http://fental.github.io/Fental/public/js/disqus.js"></script>
+　　</body>
+</html>
