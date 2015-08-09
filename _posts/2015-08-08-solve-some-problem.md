@@ -63,7 +63,7 @@ Object.prototype.toString()规范如下：
 
 对象间赋值为引用赋值，简单类型赋值则是直接赋值。。。（不知道自己在疑惑什么= =||）
 
-```
+<pre>
 var a = {
     "a": {
         "aa": 2
@@ -81,11 +81,11 @@ var a = {
 var b = a.a.aa;
 b = 3;
 console.log(a.a.aa);	// 2
-```
+</pre>
 
 所以这里有个问题来了，怎么clone对象。递归！！
 
-```
+<pre>
 // 来裸写段代码
 
 /**
@@ -112,7 +112,7 @@ function clone(obj) {
     }
     return result;
 }
-```
+</pre>
 
 ## 疑惑四 浏览器输入url的一系列行为
 
