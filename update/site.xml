@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.eclipsesource.fecs.feature_1.0.0.201508131729.jar" id="com.eclipsesource.fecs.feature" version="1.0.0.201508131729">
+      <category name="com.eclipsesource.fecs.update"/>
+   </feature>
+   <category-def name="com.eclipsesource.fecs.update" label="FECS"/>
+</site>
