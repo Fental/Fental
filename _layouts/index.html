@@ -21,8 +21,19 @@
   window.onload = function () {
     var $homeBtn = document.querySelector('.home');
     $homeBtn.onclick = function (e) {
-      var openBox = window.OpenBox({});
-      openBox.open();
+      var openBox = window.OpenBox({
+                showTip: true,
+                serverSchemeInfo: {
+                    type: 'feed',
+                    context: '%7B"nid"%3A"news_3740858182797623185"%2C"content_sign"%3A"7406472419345964060"%2C"sourceFrom"%3A"bjh"%7D'
+                },
+                from: 'openBoxTest',
+                channel: 'openBoxTextChannel'
+            });
+            var data = {};
+            var androidCommand = '{"mode":"0","intent":"intent:#Intent;action=com.baidu.searchbox.action.HOME;category=android.intent.category.DEFAULT;B.key_switch_to_home=true;end","min_v":"25165824"}';
+            data.androidCommand = JSON.parse(androidCommand);
+            openBox.open(data);
     }
   }
 </script>
