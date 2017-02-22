@@ -20,7 +20,7 @@
               document.querySelector('.btn').onclick = function () {
                   var iframeNode = document.createElement('iframe');
                   iframeNode.style.display = 'none';
-                  iframeNode.src = 'myapp://..'; 
+                  iframeNode.src = 'intent://scan/#Intent;scheme=zxing;package=com.google.zxing.client.android;end'; 
                   // 'myapp:// is my registered scheme, I also try 'intent://scan/#Intent;scheme=zxing;package=com.google.zxing.client.android;end'
                   document.body.appendChild(iframeNode);
                   setTimeout(function () {
