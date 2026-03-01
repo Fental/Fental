@@ -2,7 +2,7 @@
 layout: post
 title: js的事件冒泡和捕获
 ---
-#js的事件冒泡和捕获
+# js的事件冒泡和捕获
 
 1. 冒泡型事件：时间按照从最特定的事件目标到最不特定的事件目标（document）的顺序触发
 2. 捕获型事件：事件从最不精确的对象（document）开始触发，然后到最精确（可以在窗口级别捕获事件，不过必须由开发人员特别指定）。
@@ -80,6 +80,6 @@ e.addEventListener("click", handler5, true);
 
 不是所有事件都能冒泡。例如，blur focus load unload
 
-#参考链接
+# 参考链接
 
 [js事件冒泡和事件捕获详细介绍](http://blog.csdn.net/Tender001/article/details/44589501)

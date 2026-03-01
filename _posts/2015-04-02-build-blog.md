@@ -2,18 +2,18 @@
 layout: post
 title: 我的博客——搭建过程
 ---
-#我的博客——搭建过程
+# 我的博客——搭建过程
 
-##为什么要在Github上搭建静态博客系统
+## 为什么要在Github上搭建静态博客系统
 
 1. 相较于CSDN等博客，我觉得Github的个人定制空间比较大。
 2. 逼格...高
 
-##博客成型
+## 博客成型
 
 根据阮一峰前辈的博文[搭建一个免费的，无限流量的Blog----github ](http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html)搭建了一个最简单的blog。
 
-##充实博客
+## 充实博客
 
 在编写之前，为文章的模板（_layout目录下的html文件）增加样式和插件功能。需要注意的地方：样式表和js文件路径使用绝对路径会好些。（为什么呢？个人猜测就是jekyll在转换文章的时候，文章的实际存放路径有变动？查查资料先。）
 
@@ -63,7 +63,7 @@ img.emoji {
 
 + 增加插件功能：评论（[disqus](https://disqus.com/)）、[emoji表情](https://github.com/hassankhan/emojify.js)、代码高亮（[pygments](https://github.com/hugomaiavieira/pygments-style-github)）(具体操作见下篇博文。)
 
-##编写博客
+## 编写博客
 
 进入_posts目录，创建文章。
 
@@ -84,7 +84,7 @@ img.emoji {
 
 我使用markdownpad2编写博客，=。=
 
-##上传博文
+## 上传博文
 
 熟悉几个git操作：
 

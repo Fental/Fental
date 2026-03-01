@@ -3,9 +3,9 @@ layout: post
 title: 百度面试相关问题
 ---
 
-# 百度面试相关问题
+#  百度面试相关问题
 
-## 1. html语义化
+##  1. html语义化
 
 个人对语义化的理解，最忌讳的一点就是放着html5的标签不用然后一直div，根据样式效果选择标签。
 
@@ -19,11 +19,11 @@ title: 百度面试相关问题
 
 样式就交给 CSS 来。
 
-## 2. img 的title 和 alt 的区别
+##  2. img 的title 和 alt 的区别
 
 img 的 title 是指鼠标悬浮在图片上显示的文字，提供建议性信息； alt 则是图片显示不出来时的替代文字（用来替代图像而不是做额外申明）
 
-## 3. CSS布局
+##  3. CSS布局
 
 布局相关：display
 
@@ -39,7 +39,7 @@ none：一些元素的默认值是它，如script，被用来在不删除元素�
 
 其他display值，如inline-block，flex
 
-## 4. 清除浮动
+##  4. 清除浮动
 
 同级：可以在浮动元素后面的元素（或设置一个空元素），使用CSS的clean: left || right || both属性清除
 
@@ -60,7 +60,7 @@ display的值为table-cell, table-caption, inline-block中的任何一个。
 
 position的值不为relative和static。
 
-## 5. 实现Ajax的过程
+##  5. 实现Ajax的过程
 
 + 新建一个xhr（XMLHTTPRequest）对象（注意老ie，ie6需要采取兼容方式）
 
@@ -72,12 +72,12 @@ position的值不为relative和static。
 
 + 调用对象的 send 方法来发送数据，send方法发送请求主体，使用get则可以send()或者send(null)
 
-## 6. 取消a链接的默认跳转行为
+##  6. 取消a链接的默认跳转行为
 
 + 设置href="###"，这么设置既可以达到空链接效果，又可以防止与锚冲突，在事件中返回false
 + 设置href="javascript:void(0)"，但这样不好，个人觉得不符合web标准
 
-## 7. 水平垂直居中
+##  7. 水平垂直居中
 
 1、传统的方法：
 
@@ -118,7 +118,7 @@ box-pack: start | end | center | justify(最后一个值指的是每个子元素
 
 + 还有其他属性，[看这里](http://www.w3school.com.cn/cssref/pr_box-pack.asp)
 
-## 8. JS 数据类型判断
+##  8. JS 数据类型判断
 
 可以用typeof区分出简单数据类型、function 和 其他高级数据类型
 
@@ -140,7 +140,7 @@ typeof function() {};		// function
 
 （知心姐姐之前说过一些坑，回头补）
 
-## 9. 事件模型
+##  9. 事件模型
 
 支持两种事件模型：捕获型事件 以及 冒泡型事件
 
@@ -152,7 +152,7 @@ typeof function() {};		// function
 可以参考我之前整理的事件模型总结：
 [这里](http://fental.github.io/Fental/2015/04/17/js-event-spread.html)
 
-## 10. IE和DOM事件绑定的区别
+##  10. IE和DOM事件绑定的区别
 
 事件绑定有三种方式：
 
@@ -170,17 +170,17 @@ var target = e.srcElement || e.target;
 
 为什么要这么写呢，window.event 代表着事件对象的状态，只有在事件发生时生效，但这不是标准，只有在IE中才是这样（好像IE8及IE8之前都是这样）。至于W3C标准支持的浏览器事件对象是事件函数的第一个参数，参数名随意
 
-## 11. JS动画
+##  11. JS动画
 
 通过计时器，setInterval()，注意做动画时由于人眼对60帧的要求，所以要根据动画完成事件计算16ms的增量，当目标属性达到指定值则clearInterval()。
 
-## 12. 计时器深入理解
+##  12. 计时器深入理解
 
 js的计时器主要有setTimeout和setInterval，然而js是单线程，很多人都错误地以为计时器类似线程。其实他们都是设置了再一段时间后异步回调函数，异步回调的函数会挂起放在事件队列中，但是得等到执行线程空闲才会去执行回调函数。
 
 setInterval存在时间间隔或许会跳过的问题。（不是特别了解）
 
-## 13. 获取元素的页面坐标
+##  13. 获取元素的页面坐标
 
 提到坐标就需要讲到两个坐标系：视口坐标和文档坐标，元素的位置是以像素来度量，向右代表X坐标增加，向下代表Y坐标增加。
 
@@ -191,17 +191,17 @@ setInterval存在时间间隔或许会跳过的问题。（不是特别了解）
 
 so：问题来了，哪些坐标是可以获取的呢？
 
-### 滚动条偏移量：
+###  滚动条偏移量：
 
 + 除了 IE8 及更早的版本以外，其他浏览器都可用：window.pageXoffset和window.pageYoffset可以获得
 + 标准模式的 IE （或任何浏览器）：document.documentElement.scrollLeft和document.documentElement.scrollRight
 
-### 视口尺寸：
+###  视口尺寸：
 
 + 除了 IE8 及更早的版本以外，其他浏览器都可用：window.innerWidth和window.innerHeight可以获得
 + 标准模式的 IE （或任何浏览器）：document.documentElement.clientWidth和document.documentElement.clientHeight
 
-### 视口坐标：
+###  视口坐标：
 
 IE5 引入getBoundingClientRect()，在各浏览器中都已实现。
 
@@ -209,7 +209,7 @@ element.getBoundingClientRect() 返回一个有left、right、top、bottom的对
 
 利用视口坐标和滚动条偏移量可以获得*文档坐标*
 
-### 关于元素尺寸、位置和溢出的更多信息
+###  关于元素尺寸、位置和溢出的更多信息
 
 offset系列、client系列以及scroll系列
 
@@ -273,28 +273,28 @@ function getElementPos(elt) {
 }
 </pre>
 
-## 14. JSONP相关知识
+##  14. JSONP相关知识
 
 没接触过
 
-## 15. HTTP状态码
+##  15. HTTP状态码
 
 常见302、304、403、404、500、503
 
 302：重定向；304：未修改；403：禁止，权限错误；404：未找到资源；500：服务器错误；503：服务器忙
 
-## 16. 块级元素以及内联元素的区别
+##  16. 块级元素以及内联元素的区别
 
-## 17. 项目
+##  17. 项目
 
-## 18. png24 png8
+##  18. png24 png8
 
 1. png8和png24的根本区别，不是颜色位的区别，而是存储方式不同。
 2. png8有1位的布尔透明通道（要么完全透明，要么完全不透明），png24则有8位（256阶）的布尔透明通道（所谓半透明）。
 png-8 和 gif 有一些相似之处，模式都是索引颜色，只支持像素级的纯透明，不支持 alpha 透明。
 我们通常说的“IE6 不支持 PNG 透明”，是指不支持 PNG-24 的透明。但是 IE6 支持 PNG-8 的透明，就像支持 gif 的透明一样。
 
-## 19. 盒模型
+##  19. 盒模型
 
 CSS认为，每个元素都包含在一个盒子中，这整个盒模型由内容、内边距、边框、外边距构成。
 
@@ -302,7 +302,7 @@ CSS认为，每个元素都包含在一个盒子中，这整个盒模型由内�
 
 所以为了解决这一问题，应该使用box-sizing: border-box，则width包括content，padding和border
 
-## 20. 定位方式
+##  20. 定位方式
 
 position: static | relative | absolute | fixed
 
@@ -316,24 +316,24 @@ position: static | relative | absolute | fixed
 
 + inherit 规定从父元素继承 position 属性的值。
 
-## 21. CSS3新增的属性
+##  21. CSS3新增的属性
 
 边框：border-radius、border-shadow、text-shadow
 字体：font-face
 转换：translate scale rotate
 动画：@keyframes 。。。。
 
-## 22. CSS实现省略号
+##  22. CSS实现省略号
 
 1. overflow: hidden;
 2. white-space: nowrap;
 3. text-overflow: ellipsis;
 
-## 23. HTML5新增的内容
+##  23. HTML5新增的内容
 
 各种语义化标签，video等
 
-## 24. this
+##  24. this
 
 this指针的指向取决于函数的调用模式
 
@@ -342,7 +342,7 @@ this指针的指向取决于函数的调用模式
 + 构造器调用：this绑定到创建的新对象
 + apply、call方法：指定this值
 
-## 25. 作用域
+##  25. 作用域
 
 JS变量的作用域：全局变量和局部变量，函数内部可以直接读取全局变量（反过来则涉及闭包）
 
@@ -358,7 +358,7 @@ ES5词法作用域，没有块级作用域，存在声明提前的现象。
 
 **[[scope]]属性是在定义一个函数的时候决定的，而非调用的时候**
 
-## 26. 闭包
+##  26. 闭包
 
 个人对闭包的理解：函数体内的变量保存在起作用域中，函数中父函数不会被GC（阮一峰），形成一个包。常用闭包的用途：构造模块，外部函数通过内部函数返回的函数操作内部函数变量，这些函数变量的值始终保存在内存中。
 
@@ -382,7 +382,7 @@ f1是f2的父函数，f2被赋给一个全局变量，导致f2始终在内存中
 
 注意一点，闭包内存消耗大。
 
-## prototype && constructor
+##  prototype && constructor
 
 [最刺激的参考链接](http://www.cnblogs.com/wangfupeng1988/p/3977987.html)
 
@@ -464,9 +464,9 @@ javascript中的继承是通过原型链来体现的
 访问一个对象的属性时，先在基本属性中查找，如果没有，再沿着__proto__这条链向上找，这就是原型链。
 
 
-## 27. 创建对象的模式
+##  27. 创建对象的模式
 
-## 28. localStorage 和 sessionStorage
+##  28. localStorage 和 sessionStorage
 
 区别在于存储的有效期和作用域不同。
 
@@ -474,9 +474,9 @@ localStorage存储的数据是永久性，除非web应用可以删除数据的�
 
 sessionStorage有效期与最顶层窗口或者浏览器标签页一样；作用域限定在文档源和窗口中。
 
-## 29. 前端是怎样的一个体系
+##  29. 前端是怎样的一个体系
 
-## 30. 继承
+##  30. 继承
 
 ES5 继承方式
 
