@@ -1,6 +1,7 @@
 ---
 layout: post
 title: js模块化编程（二）：amd规范
+tags: [JavaScript, 模块化, AMD]
 ---
 # js模块化编程（二）：amd规范
 

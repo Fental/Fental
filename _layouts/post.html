@@ -13,6 +13,14 @@
       {{ content }}
     </article>
 
+    {% if page.tags %}
+    <div class="post-tags">
+      {% for tag in page.tags %}
+      <span class="tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <aside class="post-aside">
       <a href="{{ site.baseurl }}/">← 返回首页</a>
     </aside>

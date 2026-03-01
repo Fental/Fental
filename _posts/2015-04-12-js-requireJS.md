@@ -1,6 +1,7 @@
 ---
 layout: post
 title: js模块化编程（三）：require.js的用法
+tags: [JavaScript, 模块化, RequireJS]
 ---
 # js模块化编程（三）：require.js的用法
 

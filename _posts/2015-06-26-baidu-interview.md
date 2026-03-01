@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 百度面试相关问题
+tags: [面试, JavaScript, HTML, CSS]
 ---
 
 #  百度面试相关问题

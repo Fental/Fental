@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JavaScript严格模式
+tags: [JavaScript]
 ---
 
 #  JavaScript严格模式

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 解决之前存在的一些疑惑
+tags: [JavaScript]
 ---
 
 #  解决之前存在的一些疑惑

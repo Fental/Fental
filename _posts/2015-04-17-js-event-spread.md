@@ -1,6 +1,7 @@
 ---
 layout: post
 title: js的事件冒泡和捕获
+tags: [JavaScript, 事件]
 ---
 # js的事件冒泡和捕获
 

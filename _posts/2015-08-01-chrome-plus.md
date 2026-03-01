@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Chrome 扩展插件
+tags: [工具, Chrome]
 ---
 
 #  Chrome 扩展插件

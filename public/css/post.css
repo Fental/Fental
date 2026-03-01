@@ -214,6 +214,41 @@ th {
   background-color: var(--border-color);
 }
 
+/* Tags */
+.post-tags {
+  margin: 1.5em 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.post-tags .tag {
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  background-color: var(--code-bg);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  font-size: 0.875em;
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  transition: all 0.2s ease;
+}
+
+.post-tags .tag:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.post-list .post-tags {
+  margin-top: 0.5em;
+}
+
+.post-list .post-tags .tag {
+  font-size: 0.8125em;
+  padding: 0.2em 0.6em;
+}
+
 /* Utility classes */
 .container {
   max-width: 800px;
