@@ -2,11 +2,11 @@
 layout: post
 title: js模块化编程（二）：amd规范
 ---
-#js模块化编程（二）：amd规范
+# js模块化编程（二）：amd规范
 
 规范地使用模块
 
-##模块的规范
+## 模块的规范
 
 有了模块，方便使用别人的代码，想要什么功能就加载什么模块。
 
@@ -14,7 +14,7 @@ title: js模块化编程（二）：amd规范
 
 > 通行的js模块规范共有两种：CommonJS和AMD
 
-##CommonJS
+## CommonJS
 
 [node.js](http://nodejs.org/)项目标志着js模块化编程正式诞生。node.js的模块系统参照CommonJS规范实现。
 
@@ -29,11 +29,11 @@ CommonJS中，有个全局方法require()，用于加载模块。假定有模块
 
 针对浏览器编程，对CommonJS不多介绍，这里只要知道require()用于加载模块。
 
-##浏览器环境(AMD规范诞生的背景)
+## 浏览器环境(AMD规范诞生的背景)
 
 由于重大局限，CommonJS规范不适用于浏览器环境。上一节的代码如果在浏览器中运行，有一个问题：第二行在第一行之后运行，因此必须等math.js加载完。因此浏览器端的模块，不能“同步加载”，只能采用“异步加载”。
 
-##AMD（Asynchronous Moudule Definition）
+## AMD（Asynchronous Moudule Definition）
 
 异步模块定义。采用异步方式加载模块，不影响后面语句的运行。所有依赖这个模块的语句，都定义在回调函数，模块加载完成后，这个回调函数才会运行。
 

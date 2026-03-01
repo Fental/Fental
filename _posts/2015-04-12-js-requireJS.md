@@ -2,11 +2,11 @@
 layout: post
 title: js模块化编程（三）：require.js的用法
 ---
-#js模块化编程（三）：require.js的用法
+# js模块化编程（三）：require.js的用法
 
 实战，使用库require.js
 
-##为什么使用require.js
+## 为什么使用require.js
 
 加载多个js文件
 
@@ -23,7 +23,7 @@ require.js诞生，解决两个问题：
 1. js文件异步加载，避免网页失去响应
 2. 管理模块之间依赖性，便于代码编写和维护
 
-##require.js的加载
+## require.js的加载
 
 [官网下载](http://requirejs.org/docs/download.html)最新版本，下载后加载这个文件。加载这个文件也可能造成网页失去响应，解决办法，一个是把他放到网页底部加载，另一个写成：
 
@@ -37,7 +37,7 @@ async属性表名这个文件需异步加载，避免网页失去响应。IE不�
 
 data-main属性作用是，指定网页程序的主模块。在上例中，js目录下的main.js，这个文件会第一个被require.js加载。由于require.js默认文件后缀名是js，所以可以把main.js简写成main
 
-##主模块的写法
+## 主模块的写法
 
 主模块：整个网页的入口代码，所有代码都从这儿开始运行。如果代码不依赖任何其他模块，那么可以直接写入js代码。但这样的话就没必要使用require.js。
 
@@ -62,7 +62,7 @@ require()异步加载mouduleA，mouduleB，moduleC，浏览器不会失去响应
 
 require.js会先加载jQuery、underscore和backbon，然后再运行回调函数。主模块的代码就写在回调函数中。
 
-##模块的加载
+## 模块的加载
 
 上面那个例子中，主模块的依赖模块是['jquery','underscore','backbone']。默认情况，require.js假定这三个模块与main.js在同一个目录，文件名分别为jquery.js,underscore.js,backbone.js，然后自动加载
 
@@ -108,7 +108,7 @@ require.js会先加载jQuery、underscore和backbon，然后再运行回调函�
 
 require.js要求，每个模块是一个单独的js文件。但是如果加载多个模块，就会发出多次http请求，会影响网页的加载速度。因此，require.js提供了一个[优化工具](http://requirejs.org/docs/optimization.html)，模块部署完毕以后，可以用这个工具将多个模块合并在一个文件中，减少http请求
 
-##amd模块的写法
+## amd模块的写法
 
 require.js加载的模块，采用amd规范。也就是说，模块必须按照amd的规定来写。
 
@@ -146,7 +146,7 @@ require.js加载的模块，采用amd规范。也就是说，模块必须按照a
 
 require()函数加载上面这个模块的时候，会先加载myLib.js文件
 
-##加载非规范模块
+## 加载非规范模块
 
 理论上，require.js加载的模块，必须按amd规范、用define()函数定义的模块。但require.js也可以加载非规范的模块。
 
@@ -184,7 +184,7 @@ require.config()接受一个配置对象，这个对象除了paths属性之外�
 		}
 	});
 
-##[require.js插件](https://github.com/jrburke/requirejs/wiki/Plugins)
+## [require.js插件](https://github.com/jrburke/requirejs/wiki/Plugins)
 
 提供一系列插件，实现一些特定功能
 
@@ -203,6 +203,6 @@ text和image插件，允许require.js加载文本和图片文件。
 
 类似插件还有json和mdown，用于加载json文件和markdown文件。
 
-#参考链接
+# 参考链接
 
 [Javascript模块化编程（三）：require.js的用法](http://www.ruanyifeng.com/blog/2012/11/require_js.html)

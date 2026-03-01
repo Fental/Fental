@@ -3,15 +3,15 @@ layout: post
 title: 解决之前存在的一些疑惑
 ---
 
-# 解决之前存在的一些疑惑
+#  解决之前存在的一些疑惑
 
 其实这些东西会是疑惑主要是老是懒得查。
 
-## 疑惑一 Object.prototype.toString
+##  疑惑一 Object.prototype.toString
 
 Object.prototype.toString老是要通过call来调用（http://www.cnblogs.com/ziyunfei/archive/2012/11/05/2754156.html）主要原因应该是typeof和instanceof比较不可靠，Object.prototype.toString可靠的地方就在于它的原理。
 
-### ES3 
+###  ES3 
 
 ES3的Object.prototype.toString()方法规范如下：
 
@@ -33,7 +33,7 @@ Object.prototype.toString()规范如下：
 
 Array, Boolean, Date, Error, Function, Math, Number, Object, RegExp, String
 
-### ES5
+###  ES5
 
 ES5的规范变得更加详细，[[class]]内部属性定义上也有些变化。
 
@@ -46,20 +46,20 @@ Object.prototype.toString()规范如下：
 + 获取this内部属性[[Class]]的值
 + 返回字符串"[object" + [[Class]] + "]"
 
-### ES6
+###  ES6
 
 [[Class]]内部属性好像要被取消的样纸。。11年的文章，待考核（自己在最新内容获取的能力上有待提升。）
 
 [参考链接](http://www.cnblogs.com/ziyunfei/archive/2012/11/05/2754156.html)
 
-## 疑惑二 typeof
+##  疑惑二 typeof
 
 不遵守规范导致一门语言如此令人诟病。。。
 
 [参考链接](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof)
 
  
-## 疑惑三 关于变量赋值，引用之类的问题
+##  疑惑三 关于变量赋值，引用之类的问题
 
 对象间赋值为引用赋值，简单类型赋值则是直接赋值。。。（不知道自己在疑惑什么= =||）
 
@@ -114,7 +114,7 @@ function clone(obj) {
 }
 </pre>
 
-## 疑惑四 浏览器输入url的一系列行为
+##  疑惑四 浏览器输入url的一系列行为
 
 之前疑惑的地方就是，单线程却怎么并行请求资源。
 

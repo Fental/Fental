@@ -3,15 +3,15 @@ layout: post
 title: CSS3 3D transform变换
 ---
 
-# CSS3 3D transform变换
+#  CSS3 3D transform变换
 
 [参考链接](http://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/)
 
-## 1. 3D坐标：
+##  1. 3D坐标：
 
 <img src="http://image.zhangxinxu.com/image/blog/201209/3d_axes.png">
 
-## 2. 理解三维坐标的突破口：
+##  2. 理解三维坐标的突破口：
 
 3Dtransform有下面三个方法：
 
@@ -27,7 +27,7 @@ title: CSS3 3D transform变换
 
 <img src="http://image.zhangxinxu.com/image/blog/201209/2012-09-05_175551.png">
 
-## 3. perspective属性（透视、视角）
+##  3. perspective属性（透视、视角）
 
 perspective属性的存在与否决定了所看到的变换是2D的还是3D的。
 
@@ -37,7 +37,7 @@ CSS3 3D transform的透视点在浏览器前方。
 	
 <img src="http://image.zhangxinxu.com/image/blog/201209/3d-distance.jpg">
 
-## 4. 寻找透视位置：
+##  4. 寻找透视位置：
 
 近大远小，translateZ改变元素在Z轴的位置。如果设置元素的perspective为200像素。
 
@@ -51,7 +51,7 @@ perspective: 200px;
 	
 translateZ超过200px时，子元素不见了，道理也很简单，元素移到了眼睛后面。。。。
 
-## 5. perspective的两种书写
+##  5. perspective的两种书写
 
 + 用在舞台元素上（动画元素们的共同父辈元素）
 + 用在当前动画元素上，与transform的其他属性写在一起。
@@ -80,19 +80,19 @@ translateZ超过200px时，子元素不见了，道理也很简单，元素移�
 
 解释：上面舞台整个作为透视元素，看到的每个子元素的形体都是不一样；下面每个元素都有自己的视点，rotateY的角度一样，因此，看上去的效果一模一样。。
 
-### 5.1 chrome浏览器 以及 透视盲区
+###  5.1 chrome浏览器 以及 透视盲区
 
-#### 5.1.1 chrome浏览器
+####  5.1.1 chrome浏览器
 
 chrome浏览器中，想看到完整地3D效果，需要3D变换元素正好在窗体的垂直居中位置。（但现在好像不用的样子，我的chrome版本版本 43.0.2357.13）
 
-#### 5.1.2 透视盲区
+####  5.1.2 透视盲区
 
 特定的视角以及距离形成视觉盲区
 
 <img src="http://image.zhangxinxu.com/image/blog/201209/2012-09-05_224822.png">
 
-## 6. 透视原点perspective-origin
+##  6. 透视原点perspective-origin
 
 眼睛看的位置，默认舞台或元素的中心。如果我们对中心位置不感兴趣，可使用perspective-origin属性将视线放在其他地方。比如：
 
@@ -104,7 +104,7 @@ perspective-origin: 25% 75%;
 
 <img src="http://image.zhangxinxu.com/image/blog/201209/perspective02.png">
 
-## 7. transform-style属性
+##  7. transform-style属性
 
 transform-style属性是3D空间一个重要属性，指定嵌套元素如何在3D空间中呈现。主要有两个属性值：flat | preserve-3d
 
@@ -122,7 +122,7 @@ transform-style属性需要设置在父元素中，并且高于任何嵌套的�
 
 [参考链接](http://www.w3cplus.com/css3/transform-basic-property.html)
 
-## 8. backface-visibility
+##  8. backface-visibility
 
 =。= 鑫空间的解释貌似有点问题。。。
 
@@ -134,6 +134,6 @@ backface-visibility: visible | hidden;
 
 visible：背面是可见的；hidden：背面是不可见的
 
-## 9. 实践-旋转木马
+##  9. 实践-旋转木马
 
 [demo](http://www.zhangxinxu.com/study/201209/pictures-3d-slide-view.html)
