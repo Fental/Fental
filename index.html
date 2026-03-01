@@ -1,12 +1,4 @@
 ---
 layout: index
-title: 我的 Blog
+title: Fental's Blog
 ---
-<h2>{{ page.title }}</h2>
-<p>最新文章</p>
-<ul>
-{% for post in site.posts %}
-<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-{% endfor %}
-</ul>
-<!-- <div class="wrap"><a class="btn home">进入 APP 首页</a></div> -->
