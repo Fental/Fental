@@ -1,6 +1,7 @@
 ---
 layout: post
 title: JavaScript设计模式 1-2章
+tags: [JavaScript, 设计模式]
 ---
 # JS设计模式读书笔记
 
