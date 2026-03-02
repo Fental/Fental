@@ -9,17 +9,21 @@ permalink: /search/
   (function() {
     const searchInput = document.getElementById('search-input');
     const resultsDiv = document.getElementById('search-results');
+
+    // Parse posts data safely
     const posts = [
       {% for post in site.posts %}
       {
-        title: "{{ post.title | escape }}",
+        title: {{ post.title | jsonify }},
         url: "{{ site.baseurl }}{{ post.url }}",
         date: "{{ post.date | date: "%Y-%m-%d" }}",
-        tags: [{% for tag in post.tags %}"{{ tag | escape }}",{% endfor %}],
-        content: "{{ post.content | strip_html | strip_newlines | escape | truncatewords: 100 }}"
+        tags: [{% for tag in post.tags %}{{ tag | jsonify }},{% endfor %}],
+        content: {{ post.content | strip_html | strip_newlines | slice: 0, 500 | jsonify }}
       },
       {% endfor %}
     ];
+
+    console.log('Loaded posts:', posts.length);
 
     searchInput.addEventListener('input', function(e) {
       const query = e.target.value.toLowerCase().trim();
@@ -30,11 +34,15 @@ permalink: /search/
       }
 
       const results = posts.filter(post => {
-        return post.title.toLowerCase().includes(query) ||
-               post.tags.some(tag => tag.toLowerCase().includes(query)) ||
-               post.content.toLowerCase().includes(query);
+        const titleMatch = post.title.toLowerCase().includes(query);
+        const contentMatch = post.content.toLowerCase().includes(query);
+        const tagsMatch = post.tags && post.tags.length > 0 &&
+                        post.tags.some(tag => tag.toLowerCase().includes(query));
+
+        return titleMatch || contentMatch || tagsMatch;
       });
 
+      console.log('Query:', query, 'Results:', results.length);
       displayResults(results);
     });
 
@@ -46,16 +54,24 @@ permalink: /search/
 
       const html = results.map(post => `
         <div class="search-result">
-          <h3><a href="${post.url}">${post.title}</a></h3>
+          <h3><a href="${post.url}">${escapeHtml(post.title)}</a></h3>
           <div class="post-meta">${post.date}</div>
           <div class="post-tags">
-            ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${post.tags && post.tags.length > 0
+              ? post.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')
+              : ''}
           </div>
-          <p class="result-excerpt">${post.content}...</p>
+          <p class="result-excerpt">${escapeHtml(post.content)}...</p>
         </div>
       `).join('');
 
       resultsDiv.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
 
     // Initial hint
@@ -81,3 +97,4 @@ permalink: /search/
 
   <div id="search-results" class="search-results"></div>
 </div>
+
