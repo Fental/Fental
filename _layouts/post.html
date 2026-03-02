@@ -36,6 +36,25 @@
       <a href="{{ site.baseurl }}/">← 返回首页</a>
     </aside>
 
+    <!-- Post Navigation -->
+    {% if page.previous or page.next %}
+    <nav class="post-navigation">
+      {% if page.previous %}
+      <a href="{{ site.baseurl }}{{ page.previous.url }}" class="post-nav-link post-nav-prev">
+        <span class="nav-label">← 上一篇</span>
+        <span class="nav-title">{{ page.previous.title }}</span>
+      </a>
+      {% endif %}
+
+      {% if page.next %}
+      <a href="{{ site.baseurl }}{{ page.next.url }}" class="post-nav-link post-nav-next">
+        <span class="nav-label">下一篇 →</span>
+        <span class="nav-title">{{ page.next.title }}</span>
+      </a>
+      {% endif %}
+    </nav>
+    {% endif %}
+
     <!-- Disqus Comments -->
     <div id="disqus_thread"></div>
     <noscript>
