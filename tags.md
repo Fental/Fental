@@ -3,9 +3,51 @@ layout: page
 title: 标签归档
 permalink: /tags/
 ---
-<div class="page">
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add data-count attribute to tags in cloud
+    const tagsCloud = document.querySelector('.tags-cloud');
+    if (tagsCloud) {
+      tagsCloud.querySelectorAll('.tag').forEach(tag => {
+        const countText = tag.querySelector('.tag-count');
+        if (countText) {
+          const count = parseInt(countText.textContent.match(/\d+/)[0]);
+          tag.setAttribute('data-count', count > 20 ? '20+' : count);
+        }
+      });
+    }
+
+    // Smooth scroll for tag links
+    document.querySelectorAll('.tags-cloud .tag').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+
+        if (targetSection) {
+          targetSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+          // Highlight the section briefly
+          targetSection.style.boxShadow = '0 0 0 3px rgba(6, 182, 212, 0.3)';
+          setTimeout(() => {
+            targetSection.style.boxShadow = '';
+          }, 1500);
+        }
+      });
+    });
+  });
+</script>
+
+<div class="page tags-page">
   <header>
-    <h1>标签归档</h1>
+    <h1>🏷️ 标签归档</h1>
+    <p style="color: var(--text-secondary); margin-top: 0.5em;">
+      共 <strong>{{ site.tags | size }}</strong> 个标签，<strong>{{ site.posts | size }}</strong> 篇文章
+    </p>
   </header>
 
   <main>
@@ -25,7 +67,7 @@ permalink: /tags/
         {% assign tag_name = tag | first %}
         {% assign tag_posts = tag | last | sort: 'date' | reverse %}
         <section id="{{ tag_name | slugify }}" class="tag-section">
-          <h2>{{ tag_name }} ({{ tag_posts.size }})</h2>
+          <h2>{{ tag_name }} <span style="font-size: 0.6em; opacity: 0.6; margin-left: 0.5em;">({{ tag_posts.size }})</span></h2>
           <ul class="post-list">
             {% for post in tag_posts %}
             <li>
@@ -50,28 +92,12 @@ permalink: /tags/
 
   <footer>
     <p style="color: var(--text-secondary); margin-top: 3em;">
-      <a href="{{ site.baseurl }}/">← 返回首页</a>
+      <a href="{{ site.baseurl }}/" class="back-link">
+        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor; vertical-align: middle; margin-right: 0.5em;">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        返回首页
+      </a>
     </p>
   </footer>
 </div>
-
-<style>
-.tags-list {
-  margin-top: 3em;
-}
-
-.tag-section {
-  margin-bottom: 3em;
-  padding-bottom: 2em;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.tag-section:last-child {
-  border-bottom: none;
-}
-
-.tag-count {
-  opacity: 0.6;
-  font-size: 0.9em;
-}
-</style>
