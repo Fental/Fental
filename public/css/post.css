@@ -272,6 +272,31 @@ th {
   padding: 0.2em 0.6em;
 }
 
+/* Post Views Counter */
+.post-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 1.5em 0;
+  font-size: 0.875em;
+  color: var(--text-secondary);
+}
+
+.views-label {
+  font-weight: 500;
+}
+
+.views-count {
+  font-weight: 600;
+  color: var(--accent-color);
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.views-unit {
+  font-size: 0.8125em;
+}
+
 /* Utility classes */
 .container {
   max-width: 800px;
