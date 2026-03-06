@@ -32,6 +32,15 @@
     </div>
     {% endif %}
 
+    <!-- Post Views Counter (Busuanzi) -->
+    <div class="post-views">
+      <span class="views-label">阅读</span>
+      <span id="busuanzi_container_page_pv" class="views-count">
+        <span id="busuanzi_value_page_pv">0</span>
+      </span>
+      <span class="views-unit">次</span>
+    </div>
+
     <aside class="post-aside">
       <a href="{{ site.baseurl }}/">← 返回首页</a>
     </aside>
@@ -73,5 +82,8 @@
   <script src="{{ site.baseurl }}/public/js/public.js"></script>
   <script src="{{ site.baseurl }}/public/js/disqus.js"></script>
   <script src="{{ site.baseurl }}/public/js/ui-features.js"></script>
+
+  <!-- Busuanzi Counter -->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
