@@ -9,41 +9,96 @@ function toggleDarkMode() {
 
   // Update CSS variables if needed
   if (isDark) {
-    document.documentElement.style.setProperty('--bg-color', '#111827');
-    document.documentElement.style.setProperty('--text-color', '#f9fafb');
-    document.documentElement.style.setProperty('--text-secondary', '#9ca3af');
-    document.documentElement.style.setProperty('--accent-color', '#60a5fa');
-    document.documentElement.style.setProperty('--accent-hover', '#3b82f6');
-    document.documentElement.style.setProperty('--border-color', '#374151');
-    document.documentElement.style.setProperty('--code-bg', '#1f2937');
-    document.documentElement.style.setProperty('--blockquote-bg', '#1f2937');
+    document.documentElement.style.setProperty('--bg-primary', '#0a0a0f');
+    document.documentElement.style.setProperty('--bg-secondary', '#12121a');
+    document.documentElement.style.setProperty('--bg-card', '#1a1a25');
+    document.documentElement.style.setProperty('--bg-elevated', '#252535');
+    document.documentElement.style.setProperty('--text-primary', '#e8e8f0');
+    document.documentElement.style.setProperty('--text-secondary', '#9ca3b0');
+    document.documentElement.style.setProperty('--text-muted', '#6b7280');
+    document.documentElement.style.setProperty('--accent-primary', '#06b6d4');
+    document.documentElement.style.setProperty('--accent-secondary', '#ec4899');
+    document.documentElement.style.setProperty('--accent-tertiary', '#8b5cf6');
+    document.documentElement.style.setProperty('--border-subtle', 'rgba(255, 255, 255, 0.06)');
+    document.documentElement.style.setProperty('--border-active', 'rgba(6, 182, 212, 0.3)');
+    document.documentElement.style.setProperty('--code-bg', '#0d0d12');
   } else {
-    document.documentElement.style.setProperty('--bg-color', '#ffffff');
-    document.documentElement.style.setProperty('--text-color', '#1f2937');
+    document.documentElement.style.setProperty('--bg-primary', '#f5f5f8');
+    document.documentElement.style.setProperty('--bg-secondary', '#ffffff');
+    document.documentElement.style.setProperty('--bg-card', '#ffffff');
+    document.documentElement.style.setProperty('--bg-elevated', '#fafafa');
+    document.documentElement.style.setProperty('--text-primary', '#1a1a20');
     document.documentElement.style.setProperty('--text-secondary', '#6b7280');
-    document.documentElement.style.setProperty('--accent-color', '#3b82f6');
-    document.documentElement.style.setProperty('--accent-hover', '#2563eb');
-    document.documentElement.style.setProperty('--border-color', '#e5e7eb');
-    document.documentElement.style.setProperty('--code-bg', '#f3f4f6');
-    document.documentElement.style.setProperty('--blockquote-bg', '#f9fafb');
+    document.documentElement.style.setProperty('--text-muted', '#9ca3b0');
+    document.documentElement.style.setProperty('--accent-primary', '#0891b2');
+    document.documentElement.style.setProperty('--accent-secondary', '#be185d');
+    document.documentElement.style.setProperty('--accent-tertiary', '#7c3aed');
+    document.documentElement.style.setProperty('--border-subtle', 'rgba(0, 0, 0, 0.08)');
+    document.documentElement.style.setProperty('--border-active', 'rgba(8, 145, 178, 0.3)');
+    document.documentElement.style.setProperty('--code-bg', '#1a1a25');
   }
 }
 
-// Load dark mode preference
+// Load dark mode preference (called early to prevent FOUC)
 function loadDarkMode() {
   const saved = localStorage.getItem('darkMode');
 
   if (saved === 'true') {
     document.body.classList.add('dark-mode');
+    // Apply dark mode variables immediately
+    document.documentElement.style.setProperty('--bg-primary', '#0a0a0f');
+    document.documentElement.style.setProperty('--bg-secondary', '#12121a');
+    document.documentElement.style.setProperty('--bg-card', '#1a1a25');
+    document.documentElement.style.setProperty('--bg-elevated', '#252535');
+    document.documentElement.style.setProperty('--text-primary', '#e8e8f0');
+    document.documentElement.style.setProperty('--text-secondary', '#9ca3b0');
+    document.documentElement.style.setProperty('--text-muted', '#6b7280');
+    document.documentElement.style.setProperty('--accent-primary', '#06b6d4');
+    document.documentElement.style.setProperty('--accent-secondary', '#ec4899');
+    document.documentElement.style.setProperty('--accent-tertiary', '#8b5cf6');
+    document.documentElement.style.setProperty('--border-subtle', 'rgba(255, 255, 255, 0.06)');
+    document.documentElement.style.setProperty('--border-active', 'rgba(6, 182, 212, 0.3)');
+    document.documentElement.style.setProperty('--code-bg', '#0d0d12');
   } else if (saved === 'false') {
     document.body.classList.remove('dark-mode');
+    // Apply light mode variables immediately
+    document.documentElement.style.setProperty('--bg-primary', '#f5f5f8');
+    document.documentElement.style.setProperty('--bg-secondary', '#ffffff');
+    document.documentElement.style.setProperty('--bg-card', '#ffffff');
+    document.documentElement.style.setProperty('--bg-elevated', '#fafafa');
+    document.documentElement.style.setProperty('--text-primary', '#1a1a20');
+    document.documentElement.style.setProperty('--text-secondary', '#6b7280');
+    document.documentElement.style.setProperty('--text-muted', '#9ca3b0');
+    document.documentElement.style.setProperty('--accent-primary', '#0891b2');
+    document.documentElement.style.setProperty('--accent-secondary', '#be185d');
+    document.documentElement.style.setProperty('--accent-tertiary', '#7c3aed');
+    document.documentElement.style.setProperty('--border-subtle', 'rgba(0, 0, 0, 0.08)');
+    document.documentElement.style.setProperty('--border-active', 'rgba(8, 145, 178, 0.3)');
+    document.documentElement.style.setProperty('--code-bg', '#1a1a25');
   } else {
     // Check system preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.classList.add('dark-mode');
+      // Apply dark mode variables immediately
+      document.documentElement.style.setProperty('--bg-primary', '#0a0a0f');
+      document.documentElement.style.setProperty('--bg-secondary', '#12121a');
+      document.documentElement.style.setProperty('--bg-card', '#1a1a25');
+      document.documentElement.style.setProperty('--bg-elevated', '#252535');
+      document.documentElement.style.setProperty('--text-primary', '#e8e8f0');
+      document.documentElement.style.setProperty('--text-secondary', '#9ca3b0');
+      document.documentElement.style.setProperty('--text-muted', '#6b7280');
+      document.documentElement.style.setProperty('--accent-primary', '#06b6d4');
+      document.documentElement.style.setProperty('--accent-secondary', '#ec4899');
+      document.documentElement.style.setProperty('--accent-tertiary', '#8b5cf6');
+      document.documentElement.style.setProperty('--border-subtle', 'rgba(255, 255, 255, 0.06)');
+      document.documentElement.style.setProperty('--border-active', 'rgba(6, 182, 212, 0.3)');
+      document.documentElement.style.setProperty('--code-bg', '#0d0d12');
     }
   }
 }
+
+// Call loadDarkMode as early as possible to prevent FOUC
+loadDarkMode();
 
 // Back to Top Button
 function scrollToTop() {

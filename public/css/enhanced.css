@@ -766,6 +766,112 @@ html {
   box-shadow: var(--shadow-glow);
 }
 
+/* Table of Contents */
+.toc {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+  padding: var(--space-md);
+  border-radius: 12px;
+  margin: var(--space-lg) 0;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s ease;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.toc-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.toc-title::before {
+  content: '📑';
+}
+
+.toc-toggle {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+
+.toc-toggle::before {
+  content: '▼';
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.toc-toggle:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.toc.collapsed .toc-toggle::before {
+  transform: rotate(-90deg);
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.toc.collapsed ul {
+  max-height: 0;
+  opacity: 0;
+}
+
+.toc:not(.collapsed) ul {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.toc li {
+  margin-bottom: 0.5em;
+}
+
+.toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: block;
+  padding: 0.4em 0.8em;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border-bottom: none;
+}
+
+.toc a:hover {
+  color: var(--accent-primary);
+  background: rgba(6, 182, 212, 0.1);
+  padding-left: 1.2em;
+}
+
+.toc ul ul {
+  padding-left: 1.5em;
+  margin-top: 0.5em;
+  border-left: 2px solid var(--border-subtle);
+}
+
+.toc ul ul a {
+  font-size: 0.95em;
+}
+
 /* Post Navigation */
 .post-navigation {
   display: flex;
