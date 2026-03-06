@@ -65,6 +65,18 @@ function handleScroll() {
   }
 }
 
+// Toggle TOC collapse/expand
+function toggleTOC() {
+  const toc = document.querySelector('.toc');
+  if (!toc) return;
+
+  toc.classList.toggle('collapsed');
+
+  // Save preference to localStorage
+  const isCollapsed = toc.classList.contains('collapsed');
+  localStorage.setItem('tocCollapsed', isCollapsed ? 'true' : 'false');
+}
+
 // Generate Table of Contents
 function generateTOC() {
   const article = document.querySelector('article');
@@ -73,14 +85,30 @@ function generateTOC() {
   const headings = article.querySelectorAll('h2, h3, h4');
   if (headings.length === 0) return;
 
+  // Find h1 to insert TOC after it
+  const h1 = article.querySelector('h1');
+  if (!h1) return;
+
   // Create TOC container
   const tocContainer = document.createElement('div');
   tocContainer.className = 'toc';
 
+  // Create TOC header with title and toggle button
+  const tocHeader = document.createElement('div');
+  tocHeader.className = 'toc-header';
+
   const tocTitle = document.createElement('div');
   tocTitle.className = 'toc-title';
   tocTitle.textContent = '目录';
-  tocContainer.appendChild(tocTitle);
+
+  const toggleButton = document.createElement('button');
+  toggleButton.className = 'toc-toggle';
+  toggleButton.setAttribute('aria-label', 'Toggle table of contents');
+  toggleButton.onclick = toggleTOC;
+
+  tocHeader.appendChild(tocTitle);
+  tocHeader.appendChild(toggleButton);
+  tocContainer.appendChild(tocHeader);
 
   // Create TOC list
   const tocList = document.createElement('ul');
@@ -121,8 +149,18 @@ function generateTOC() {
 
   tocContainer.appendChild(tocList);
 
-  // Insert TOC before article
-  article.parentNode.insertBefore(tocContainer, article);
+  // Insert TOC after h1
+  if (h1.nextSibling) {
+    article.insertBefore(tocContainer, h1.nextSibling);
+  } else {
+    article.appendChild(tocContainer);
+  }
+
+  // Load TOC collapse preference
+  const savedCollapsed = localStorage.getItem('tocCollapsed');
+  if (savedCollapsed === 'true') {
+    tocContainer.classList.add('collapsed');
+  }
 }
 
 // Initialize

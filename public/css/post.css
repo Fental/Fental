@@ -382,52 +382,113 @@ body:not(.dark-mode) .dark-mode-toggle svg.moon {
 /* Table of Contents */
 .toc {
   background-color: var(--code-bg);
-  padding: 1.5em;
   border-radius: 8px;
   margin-bottom: 2em;
   border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* TOC Header with title and toggle button */
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1.5em;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  user-select: none;
 }
 
 .toc-title {
   font-size: 1.1em;
   font-weight: 600;
-  margin: 0 0 1em 0;
+  margin: 0;
   color: var(--text-color);
 }
 
+/* Toggle button */
+.toc-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5em;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.toc-toggle::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid currentColor;
+  transition: transform 0.3s ease;
+}
+
+.toc-toggle:hover {
+  background-color: var(--bg-color);
+  color: var(--accent-color);
+}
+
+/* Rotate arrow when collapsed */
+.toc.collapsed .toc-toggle::before {
+  transform: rotate(-90deg);
+}
+
+/* TOC list */
 .toc ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 500px; /* Limit height for long TOCs */
+  overflow-y: auto;
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+/* Collapsed state */
+.toc.collapsed ul {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 1.5em;
+  overflow: hidden;
 }
 
 .toc li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0;
 }
 
 .toc a {
   color: var(--text-secondary);
   text-decoration: none;
   display: block;
-  padding: 0.25em 0;
+  padding: 0.5em 1.5em;
   border-bottom: none;
   transition: all 0.2s ease;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .toc a:hover {
   color: var(--accent-color);
   background-color: var(--bg-color);
-  padding-left: 0.5em;
 }
 
 .toc ul ul {
-  padding-left: 1.5em;
-  margin-top: 0.5em;
+  padding-left: 0;
+  margin-top: 0;
 }
 
 .toc ul ul a {
   font-size: 0.9em;
+  padding-left: 2.5em;
 }
 
 /* Back to Top Button */
