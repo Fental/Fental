@@ -1,3 +1,17 @@
 baseurl: /Fental
-url : "localhost"
+url: "https://fental.github.io"
 highlighter: pygments
+
+# Site Information
+title: Fental's Blog
+description: Fental 的技术博客，专注于前端开发、JavaScript、OpenClaw、人工智能等技术的探索与实践
+keywords: 前端,JavaScript,博客,技术,Web开发,AI,人工智能,编程,OpenClaw
+
+# Author Information
+author:
+  name: "Fental"
+  github: "https://github.com/Fental"
+
+# SEO
+social:
+  twitter: ""

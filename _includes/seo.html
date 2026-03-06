@@ -1,0 +1,111 @@
+{% if site.url %}
+  {% assign seo_url = page.url | absolute_url | replace: 'index.html', '' %}
+{% else %}
+  {% assign seo_url = site.url | append: site.baseurl | append: page.url %}
+{% endif %}
+
+<!-- Basic SEO -->
+<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+<meta name="keywords" content="{% if page.keywords %}{{ page.keywords }}{% else %}{{ site.keywords }}{% endif %}">
+<meta name="author" content="{{ site.author.name }}">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ seo_url }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ seo_url }}">
+<meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+<meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+<meta property="og:image" content="{% if page.og_image %}{{ page.og_image | absolute_url }}{% else %}{{ site.url }}/images/og-image.png{% endif %}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:locale" content="zh_CN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ seo_url }}">
+<meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+<meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+<meta name="twitter:image" content="{% if page.og_image %}{{ page.og_image | absolute_url }}{% else %}{{ site.url }}/images/og-image.png{% endif %}">
+{% if site.social.twitter %}
+<meta name="twitter:creator" content="{{ site.social.twitter }}">
+{% endif %}
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="{{ site.url }}/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="{{ site.url }}/favicon-16x16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="{{ site.url }}/apple-touch-icon.png" sizes="180x180">
+<meta name="theme-color" content="#06b6d4">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "{{ site.title }}",
+      "url": "{{ site.url }}{{ site.baseurl }}/",
+      "description": "{{ site.description }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ site.url }}{{ site.baseurl }}/search/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{ site.author.name }}",
+        "url": "{{ site.author.github }}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ site.url }}/images/logo.png"
+        }
+      }
+    }{% if page.layout == 'post' %},
+    {
+      "@type": "BlogPosting",
+      "headline": "{{ page.title }}",
+      "url": "{{ seo_url }}",
+      "datePublished": "{% if page.date %}{{ page.date | date: "%Y-%m-%d" }}{% endif %}",
+      "dateModified": "{% if page.date %}{{ page.date | date: "%Y-%m-%d" }}{% endif %}",
+      "description": "{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines }}{% else %}{{ site.description }}{% endif %}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ site.author.name }}",
+        "url": "{{ site.author.github }}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{ site.author.name }}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ site.url }}/images/logo.png"
+        }
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "{% if page.og_image %}{{ page.og_image | absolute_url }}{% else %}{{ site.url }}/images/og-image.png{% endif %}",
+        "width": 1200,
+        "height": 630
+      },
+      "keywords": "{% if page.tags %}{{ page.tags | join: ', ' }}{% endif %}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ seo_url }}"
+      }
+    }{% endif %}
+  ]
+}
+</script>
+
+<!-- Additional SEO -->
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}{{ site.baseurl }}/feed.xml">
+{% if page.previous %}
+<link rel="prev" href="{{ page.previous.url | absolute_url }}">
+{% endif %}
+{% if page.next %}
+<link rel="next" href="{{ page.next.url | absolute_url }}">
+{% endif %}

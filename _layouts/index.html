@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.title }}</title>
+  <title>{% if page.title %}{{ page.title }} | Fental's Blog{% else %}{{ site.title }}{% endif %}</title>
   <link rel="stylesheet" href="{{ site.baseurl }}/public/css/enhanced.css"/>
+  {% include seo.html %}
   <script>
     // Prevent FOUC by loading dark mode preference early
     (function() {
