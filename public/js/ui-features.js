@@ -35,7 +35,7 @@ function toggleDarkMode() {
     document.documentElement.style.setProperty('--accent-tertiary', '#7c3aed');
     document.documentElement.style.setProperty('--border-subtle', 'rgba(0, 0, 0, 0.08)');
     document.documentElement.style.setProperty('--border-active', 'rgba(8, 145, 178, 0.3)');
-    document.documentElement.style.setProperty('--code-bg', '#1a1a25');
+    document.documentElement.style.setProperty('--code-bg', '#f3f4f6');
   }
 }
 
@@ -74,7 +74,7 @@ function loadDarkMode() {
     document.documentElement.style.setProperty('--accent-tertiary', '#7c3aed');
     document.documentElement.style.setProperty('--border-subtle', 'rgba(0, 0, 0, 0.08)');
     document.documentElement.style.setProperty('--border-active', 'rgba(8, 145, 178, 0.3)');
-    document.documentElement.style.setProperty('--code-bg', '#1a1a25');
+    document.documentElement.style.setProperty('--code-bg', '#f3f4f6');
   } else {
     // Check system preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
