@@ -60,7 +60,7 @@ npx clawhub@latest install find-skills
 ### 5. baoyu-post-to-wechat：公众号发布
 公众号文章发布利器，支持 API 方式或者 Browser 方式为你发布公众号文章。
 ### 6. openclaw-backup：备份
-重要更新，比较大的动作一定要记得更新。
+重要更新，比较大的动作一定要记得备份。
 ---
 ## 实践：小龙虾帮我写博客
 把 OpenClaw 当成「执行层」，你保留「决策层」。用它提升效率，但保留你的判断力。
@@ -69,54 +69,53 @@ npx clawhub@latest install find-skills
 - Talk to Do 后又可以通过让 AI 总结成 Skill（Agent With Skill），以后都按照 SOP 去 Do
 ### 示例：把"引导写博客"驯服成一个技能
 举个例子：我如何引导 fental 更新 blog（github gh-pages），并将其变成 write-blog 技能的。"驯服"步骤如下：
+
 ```markdown
 我：我的博客是这个 Github 地址 xxxx，这个博客的样式过时、简陋，帮我优化下博客样式，先指定一份优化计划，我同意后再执行。
+
 openclaw: 博客样式优化计划 🎨
+
 根据当前代码分析，你的博客确实比较简陋。以下是优化方案：
 
 📋 优化清单
-设计风格升级
-采用简约现代设计，移除过时的阴影和圆角
-配色方案：白色背景 + 深灰文字 + 蓝色强调色
-优化字体：系统字体栈（San Francisco/Inter/Segoe UI）
-...
-
+- 设计风格升级：采用简约现代设计，移除过时的阴影和圆角
+- 配色方案：白色背景 + 深灰文字 + 蓝色强调色
+- 优化字体：系统字体栈（San Francisco/Inter/Segoe UI）
 
 ---
 
-
 我：执行这个计划
+
 openclaw：博客样式优化已完成！ 🎉
+
 已完成的改动：
-✨ 全新现代化设计（简约风格，蓝色主题）
-🌓 Dark Mode 自动适配系统深色模式
+- ✨ 全新现代化设计（简约风格，蓝色主题）
+- 🌓 Dark Mode 自动适配系统深色模式
 
 Git 提交已完成，本地改动已保存到 gh-pages 分支。
 
-
 ---
 
+我：根据 blog 的 github 项目的理解，实现 "write-blog" skill，支持以下功能：
 
-我：根据 blog 的 github 项目的理解，实现 "write-blog" skill，支持
-
-基于文本内容、markdown 文件、链接，新建并编写 blog post md 文件
-支持博客内容修改、删除、样式/交互调整
-提交 PR
+- 基于文本内容、markdown 文件、链接，新建并编写 blog post md 文件
+- 支持博客内容修改、删除、样式/交互调整
+- 提交 PR
 
 先指定一份计划，我同意后再执行
+
 openclaw："write-blog" 技能实现计划 📝
 
 📋 技能概述
-技能名称：write-blog
-描述：管理 GitHub Pages 博客，支持文章创建、编辑、删除、样式调整和 PR 流程。使用时：创建新文章、修改现有内容、调整样式、准备 PR 提交。
+- 技能名称：write-blog
+- 描述：管理 GitHub Pages 博客，支持文章创建、编辑、删除、样式调整和 PR 流程。使用时：创建新文章、修改现有内容、调整样式、准备 PR 提交。
 
 🎯 核心功能
-创建文章
-基于文本内容生成新文章
+- 创建文章：基于文本内容生成新文章
 ...
 ```
 ---
-## 写在最后：安全
+## 【写在最后：安全】
 ### Gateway 安全设置
 - 避免使用默认端口
 - 启用 gateway token
