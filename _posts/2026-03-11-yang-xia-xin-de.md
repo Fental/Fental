@@ -23,7 +23,7 @@ tags: [AI, OpenClaw, Agent]
 - OpenClaw 的能力：理解意图、调用工具、协调技能
 - 不同 Agent 的分工：搜索、记忆、技能调用、任务编排
 - 使用规则：什么时候调用、如何协作、异常处理
-### 方法论：持续迭代，而不是一次写死
+## 方法论：持续迭代，而不是一次写死
 写好 SOUL.md、USER.md、AGENTS.md 之后，不要就此放着。
 通过对话验证效果：
 - 记录优秀表现（符合），记录错误理解（偏离）
@@ -70,7 +70,6 @@ npx clawhub@latest install find-skills
 ### 示例：把"引导写博客"驯服成一个技能
 举个例子：我如何引导 fental 更新 blog（github gh-pages），并将其变成 write-blog 技能的。"驯服"步骤如下：
 
-```markdown
 我：我的博客是这个 Github 地址 xxxx，这个博客的样式过时、简陋，帮我优化下博客样式，先指定一份优化计划，我同意后再执行。
 
 openclaw: 博客样式优化计划 🎨
@@ -113,7 +112,6 @@ openclaw："write-blog" 技能实现计划 📝
 🎯 核心功能
 - 创建文章：基于文本内容生成新文章
 ...
-```
 ---
 ## 【写在最后：安全】
 ### Gateway 安全设置
